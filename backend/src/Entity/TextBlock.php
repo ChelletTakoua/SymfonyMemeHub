@@ -23,11 +23,11 @@ class TextBlock
     private ?int $y = null;
 
     #[ORM\Column(length: 10)]
-    private ?string $font_size = null;
+    private ?string $fontSize = null;
 
     #[ORM\ManyToOne(inversedBy: 'textBlocks')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?meme $meme_id = null;
+    private ?Meme $meme = null;
 
     public function getId(): ?int
     {
@@ -72,24 +72,24 @@ class TextBlock
 
     public function getFontSize(): ?string
     {
-        return $this->font_size;
+        return $this->fontSize;
     }
 
-    public function setFontSize(string $font_size): static
+    public function setFontSize(string $fontSize): static
     {
-        $this->font_size = $font_size;
+        $this->fontSize = $fontSize;
 
         return $this;
     }
 
-    public function getMemeId(): ?meme
+    public function getMeme(): ?Meme
     {
-        return $this->meme_id;
+        return $this->meme;
     }
 
-    public function setMemeId(?meme $meme_id): static
+    public function setMeme(?Meme $meme): static
     {
-        $this->meme_id = $meme_id;
+        $this->meme = $meme;
 
         return $this;
     }

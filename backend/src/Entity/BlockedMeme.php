@@ -17,18 +17,18 @@ class BlockedMeme
 
     #[ORM\ManyToOne(inversedBy: 'blockedMemes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $admin_id = null;
+    private ?User $admin = null;
 
     #[ORM\OneToMany(mappedBy: 'blockedMeme', targetEntity: report::class)]
-    private Collection $report_id;
+    private Collection $report;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?meme $meme_id = null;
+    private ?Meme $meme = null;
 
     public function __construct()
     {
-        $this->report_id = new ArrayCollection();
+        $this->report = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -36,14 +36,14 @@ class BlockedMeme
         return $this->id;
     }
 
-    public function getAdminId(): ?user
+    public function getAdmin(): ?User
     {
-        return $this->admin_id;
+        return $this->admin;
     }
 
-    public function setAdminId(?user $admin_id): static
+    public function setAdmin(?User $admin): static
     {
-        $this->admin_id = $admin_id;
+        $this->admin = $admin;
 
         return $this;
     }
@@ -51,24 +51,24 @@ class BlockedMeme
     /**
      * @return Collection<int, report>
      */
-    public function getReportId(): Collection
+    public function getReport(): Collection
     {
-        return $this->report_id;
+        return $this->report;
     }
 
-    public function addReportId(report $reportId): static
+    public function addReportId(Report $reportId): static
     {
-        if (!$this->report_id->contains($reportId)) {
-            $this->report_id->add($reportId);
+        if (!$this->report->contains($reportId)) {
+            $this->report->add($reportId);
             $reportId->setBlockedMeme($this);
         }
 
         return $this;
     }
 
-    public function removeReportId(report $reportId): static
+    public function removeReportId(Report $reportId): static
     {
-        if ($this->report_id->removeElement($reportId)) {
+        if ($this->report->removeElement($reportId)) {
             // set the owning side to null (unless already changed)
             if ($reportId->getBlockedMeme() === $this) {
                 $reportId->setBlockedMeme(null);
@@ -78,14 +78,14 @@ class BlockedMeme
         return $this;
     }
 
-    public function getMemeId(): ?meme
+    public function getMeme(): ?Meme
     {
-        return $this->meme_id;
+        return $this->meme;
     }
 
-    public function setMemeId(meme $meme_id): static
+    public function setMeme(Meme $meme): static
     {
-        $this->meme_id = $meme_id;
+        $this->meme = $meme;
 
         return $this;
     }

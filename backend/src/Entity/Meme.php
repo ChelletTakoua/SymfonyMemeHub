@@ -20,29 +20,29 @@ class Meme
     private ?string $title = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $creation_date = null;
+    private ?\DateTimeInterface $creationDate = null;
 
     #[ORM\Column]
-    private ?int $num_likes = null;
+    private ?int $numLikes = null;
 
     #[ORM\Column(type: Types::BLOB)]
-    private $result_img = null;
+    private $resultImg = null;
 
     #[ORM\ManyToOne(inversedBy: 'memes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_id = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'memes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?template $template_id = null;
+    private ?Template $template = null;
 
-    #[ORM\OneToMany(mappedBy: 'meme_id', targetEntity: TextBlock::class)]
+    #[ORM\OneToMany(mappedBy: 'meme', targetEntity: TextBlock::class)]
     private Collection $textBlocks;
 
-    #[ORM\OneToMany(mappedBy: 'meme_id', targetEntity: Like::class)]
+    #[ORM\OneToMany(mappedBy: 'meme', targetEntity: Like::class)]
     private Collection $likes;
 
-    #[ORM\OneToMany(mappedBy: 'meme_id', targetEntity: Report::class)]
+    #[ORM\OneToMany(mappedBy: 'meme', targetEntity: Report::class)]
     private Collection $reports;
 
     public function __construct()
@@ -71,60 +71,60 @@ class Meme
 
     public function getCreationDate(): ?\DateTimeInterface
     {
-        return $this->creation_date;
+        return $this->creationDate;
     }
 
-    public function setCreationDate(\DateTimeInterface $creation_date): static
+    public function setCreationDate(\DateTimeInterface $creationDate): static
     {
-        $this->creation_date = $creation_date;
+        $this->creationDate = $creationDate;
 
         return $this;
     }
 
     public function getNumLikes(): ?int
     {
-        return $this->num_likes;
+        return $this->numLikes;
     }
 
-    public function setNumLikes(int $num_likes): static
+    public function setNumLikes(int $numLikes): static
     {
-        $this->num_likes = $num_likes;
+        $this->numLikes = $numLikes;
 
         return $this;
     }
 
     public function getResultImg()
     {
-        return $this->result_img;
+        return $this->resultImg;
     }
 
-    public function setResultImg($result_img): static
+    public function setResultImg($resultImg): static
     {
-        $this->result_img = $result_img;
+        $this->resultImg = $resultImg;
 
         return $this;
     }
 
-    public function getUserId(): ?user
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?user $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getTemplateId(): ?template
+    public function getTemplate(): ?Template
     {
-        return $this->template_id;
+        return $this->template;
     }
 
-    public function setTemplateId(?template $template_id): static
+    public function setTemplate(?Template $template): static
     {
-        $this->template_id = $template_id;
+        $this->template = $template;
 
         return $this;
     }
@@ -141,7 +141,7 @@ class Meme
     {
         if (!$this->textBlocks->contains($textBlock)) {
             $this->textBlocks->add($textBlock);
-            $textBlock->setMemeId($this);
+            $textBlock->setMeme($this);
         }
 
         return $this;
@@ -151,8 +151,8 @@ class Meme
     {
         if ($this->textBlocks->removeElement($textBlock)) {
             // set the owning side to null (unless already changed)
-            if ($textBlock->getMemeId() === $this) {
-                $textBlock->setMemeId(null);
+            if ($textBlock->getMeme() === $this) {
+                $textBlock->setMeme(null);
             }
         }
 
@@ -171,7 +171,7 @@ class Meme
     {
         if (!$this->likes->contains($like)) {
             $this->likes->add($like);
-            $like->setMemeId($this);
+            $like->setMeme($this);
         }
 
         return $this;
@@ -181,8 +181,8 @@ class Meme
     {
         if ($this->likes->removeElement($like)) {
             // set the owning side to null (unless already changed)
-            if ($like->getMemeId() === $this) {
-                $like->setMemeId(null);
+            if ($like->getMeme() === $this) {
+                $like->setMeme(null);
             }
         }
 
@@ -201,7 +201,7 @@ class Meme
     {
         if (!$this->reports->contains($report)) {
             $this->reports->add($report);
-            $report->setMemeId($this);
+            $report->setMeme($this);
         }
 
         return $this;
@@ -211,8 +211,8 @@ class Meme
     {
         if ($this->reports->removeElement($report)) {
             // set the owning side to null (unless already changed)
-            if ($report->getMemeId() === $this) {
-                $report->setMemeId(null);
+            if ($report->getMeme() === $this) {
+                $report->setMeme(null);
             }
         }
 

@@ -25,7 +25,7 @@ class Template
     #[ORM\Column(type: Types::BLOB, nullable: true)]
     private $img = null;
 
-    #[ORM\OneToMany(mappedBy: 'template_id', targetEntity: Meme::class)]
+    #[ORM\OneToMany(mappedBy: 'template', targetEntity: Meme::class)]
     private Collection $memes;
 
     public function __construct()
@@ -86,7 +86,7 @@ class Template
     {
         if (!$this->memes->contains($meme)) {
             $this->memes->add($meme);
-            $meme->setTemplateId($this);
+            $meme->setTemplate($this);
         }
 
         return $this;
@@ -96,8 +96,8 @@ class Template
     {
         if ($this->memes->removeElement($meme)) {
             // set the owning side to null (unless already changed)
-            if ($meme->getTemplateId() === $this) {
-                $meme->setTemplateId(null);
+            if ($meme->getTemplate() === $this) {
+                $meme->setTemplate(null);
             }
         }
 

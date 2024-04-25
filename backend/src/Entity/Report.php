@@ -24,12 +24,12 @@ class Report
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
-    private ?meme $meme_id = null;
+    private ?Meme $meme = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
-    private ?user $user_id = null;
+    private ?User $user = null;
 
-    #[ORM\ManyToOne(inversedBy: 'report_id')]
+    #[ORM\ManyToOne(inversedBy: 'report')]
     private ?BlockedMeme $blockedMeme = null;
 
     public function getId(): ?int
@@ -73,26 +73,26 @@ class Report
         return $this;
     }
 
-    public function getMemeId(): ?meme
+    public function getMeme(): ?meme
     {
-        return $this->meme_id;
+        return $this->meme;
     }
 
-    public function setMemeId(?meme $meme_id): static
+    public function setMeme(?meme $meme): static
     {
-        $this->meme_id = $meme_id;
+        $this->meme = $meme;
 
         return $this;
     }
 
-    public function getUserId(): ?user
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?user $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }

@@ -16,37 +16,37 @@ class Like
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_id = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'likes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?meme $meme_id = null;
+    private ?Meme $meme = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUserId(): ?user
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?user $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getMemeId(): ?meme
+    public function getMeme(): ?Meme
     {
-        return $this->meme_id;
+        return $this->meme;
     }
 
-    public function setMemeId(?meme $meme_id): static
+    public function setMeme(?Meme $meme): static
     {
-        $this->meme_id = $meme_id;
+        $this->meme = $meme;
 
         return $this;
     }

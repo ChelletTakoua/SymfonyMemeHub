@@ -16,13 +16,13 @@ class BannedUser
 
     #[ORM\OneToOne(inversedBy: 'bannedUser', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?user $user_id = null;
+    private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $ban_date = null;
+    private ?\DateTimeInterface $banDate = null;
 
     #[ORM\Column]
-    private ?int $ban_duration = null;
+    private ?int $banDuration = null;
 
     #[ORM\Column(length: 255)]
     private ?string $reason = null;
@@ -32,38 +32,38 @@ class BannedUser
         return $this->id;
     }
 
-    public function getUserId(): ?user
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(user $user_id): static
+    public function setUser(User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
     public function getBanDate(): ?\DateTimeInterface
     {
-        return $this->ban_date;
+        return $this->banDate;
     }
 
-    public function setBanDate(\DateTimeInterface $ban_date): static
+    public function setBanDate(\DateTimeInterface $banDate): static
     {
-        $this->ban_date = $ban_date;
+        $this->banDate = $banDate;
 
         return $this;
     }
 
     public function getBanDuration(): ?int
     {
-        return $this->ban_duration;
+        return $this->banDuration;
     }
 
-    public function setBanDuration(int $ban_duration): static
+    public function setBanDuration(int $banDuration): static
     {
-        $this->ban_duration = $ban_duration;
+        $this->banDuration = $banDuration;
 
         return $this;
     }
