@@ -5,9 +5,13 @@ namespace App\Entity;
 use App\Repository\BlockedMemeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BlockedMemeRepository::class)]
+#[
+    ORM\Entity(repositoryClass: BlockedMemeRepository::class),
+    ORM\HasLifecycleCallbacks()
+]
 class BlockedMeme
 {
     #[ORM\Id]
@@ -25,6 +29,9 @@ class BlockedMeme
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Meme $meme = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $blockDate = null;
 
     public function __construct()
     {
@@ -89,4 +96,23 @@ class BlockedMeme
 
         return $this;
     }
+
+    public function getBlockDate(): ?\DateTimeInterface
+    {
+        return $this->blockDate;
+    }
+
+    public function setBlockDate(\DateTimeInterface $blockDate): static
+    {
+        $this->blockDate = $blockDate;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function onPersist(): void
+    {
+        $this->blockDate = new \DateTime();
+    }
+
 }

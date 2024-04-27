@@ -6,7 +6,11 @@ use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReportRepository::class)]
+#[
+    ORM\Entity(repositoryClass: ReportRepository::class),
+    ORM\HasLifecycleCallbacks()
+]
+
 class Report
 {
     #[ORM\Id]
@@ -18,15 +22,17 @@ class Report
     private ?string $reason = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $report_date = null;
+    private ?\DateTimeInterface $reportDate = null;
 
     #[ORM\Column(length: 15)]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Meme $meme = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'report')]
@@ -51,12 +57,12 @@ class Report
 
     public function getReportDate(): ?\DateTimeInterface
     {
-        return $this->report_date;
+        return $this->reportDate;
     }
 
-    public function setReportDate(\DateTimeInterface $report_date): static
+    public function setReportDate(\DateTimeInterface $reportDate): static
     {
-        $this->report_date = $report_date;
+        $this->reportDate = $reportDate;
 
         return $this;
     }
@@ -108,4 +114,12 @@ class Report
 
         return $this;
     }
+
+    #[ORM\PrePersist]
+    public function onPersist(): void
+    {
+        $this->reportDate = new \DateTime();
+        $this->status = 'pending';
+    }
+
 }

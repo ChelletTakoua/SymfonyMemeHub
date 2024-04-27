@@ -6,7 +6,10 @@ use App\Repository\BannedUserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BannedUserRepository::class)]
+#[
+    ORM\Entity(repositoryClass: BannedUserRepository::class),
+    ORM\HasLifecycleCallbacks()
+]
 class BannedUser
 {
     #[ORM\Id]
@@ -78,5 +81,11 @@ class BannedUser
         $this->reason = $reason;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function onPersist(): void
+    {
+        $this->banDate = new \DateTime();
     }
 }
