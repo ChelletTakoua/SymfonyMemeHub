@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
     ORM\Entity(repositoryClass: UserRepository::class),
     ORM\HasLifecycleCallbacks()
 ]
+
 class User
 {
     #[ORM\Id]
@@ -19,10 +20,10 @@ class User
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50 , unique: true)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50 , unique: true)]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
