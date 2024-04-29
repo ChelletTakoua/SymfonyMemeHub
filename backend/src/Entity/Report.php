@@ -12,7 +12,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
     ORM\HasLifecycleCallbacks()
 ]
 #[UniqueEntity(fields: ['user', 'meme'])]
-
 class Report
 {
     #[ORM\Id]
