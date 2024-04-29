@@ -1,0 +1,25 @@
+Project Setup:
+
+1. Navigate to the backend directory:
+    cd backend
+
+2. Install Composer dependencies:
+    composer install
+
+---------- Database Setup ----------
+
+1. Create the database schema:
+    symfony console doctrine:schema:create
+
+---------- Data Seeding ----------
+
+1. Install Doctrine Fixtures Bundle (for development):
+    composer require --dev doctrine/doctrine-fixtures-bundle
+
+2. Load initial data fixtures into the database:
+    symfony console doctrine:fixtures:load --append
+    (Note: You can omit '--append' to replace existing data. 
+    Including '--append' adds fixtures without purging existing data.)
+
+If you encounter any issues with Composer, ask @louey to provide you with the php.ini file and try adding the given configuration to your php.ini file.
+
