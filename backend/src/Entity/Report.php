@@ -6,6 +6,7 @@ use App\Repository\ReportRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[
     ORM\Entity(repositoryClass: ReportRepository::class),
@@ -20,12 +21,14 @@ class Report
     private ?int $id = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank]
     private ?string $reason = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $reportDate = null;
 
     #[ORM\Column(length: 15)]
+    #[Assert\Choice(choices: ['pending', 'resolved', 'ignored' ,'', null])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]

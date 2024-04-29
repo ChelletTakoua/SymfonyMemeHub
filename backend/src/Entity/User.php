@@ -7,6 +7,8 @@ use Doctrine\DBAL\Types\Types;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[
     ORM\Entity(repositoryClass: UserRepository::class),
@@ -21,12 +23,16 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 50 , unique: true)]
+    #[Assert\NotBlank]
     private ?string $username = null;
 
     #[ORM\Column(length: 50 , unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

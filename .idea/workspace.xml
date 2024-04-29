@@ -195,6 +195,8 @@
       <path value="$PROJECT_DIR$/backend/vendor/symfony/web-link" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/web-profiler-bundle" />
       <path value="$PROJECT_DIR$/backend/vendor/doctrine/common" />
+      <path value="$PROJECT_DIR$/backend/vendor/doctrine/data-fixtures" />
+      <path value="$PROJECT_DIR$/backend/vendor/doctrine/doctrine-fixtures-bundle" />
     </include_path>
   </component>
   <component name="ProjectColorInfo">{
@@ -216,7 +218,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -252,6 +254,9 @@
       <workItem from="1713952006504" duration="4937000" />
       <workItem from="1713997069942" duration="2578000" />
       <workItem from="1714045629566" duration="17711000" />
+      <workItem from="1714391482812" duration="3960000" />
+      <workItem from="1714395566452" duration="597000" />
+      <workItem from="1714396415998" duration="597000" />
     </task>
     <servers />
   </component>
