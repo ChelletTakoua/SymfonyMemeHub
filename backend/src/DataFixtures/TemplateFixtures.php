@@ -3,10 +3,11 @@
 namespace App\DataFixtures;
 
 use App\Entity\Template;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class TemplateFixtures extends Fixture
+class TemplateFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads Template fixtures into the database.
@@ -15,19 +16,6 @@ class TemplateFixtures extends Fixture
      */
     public function load(ObjectManager $manager)
     {
-        /*
-        for ($i = 0; $i < 10; $i++) {
-            $template = new Template();
-            $template->setTitle('Drake Hotline Bling ' . $i);
-            $template->setURL('https://i.imgflip.com/30b1gx.jpg' . $i);
-            $template->setImg('img data ' . $i);
-
-            $manager->persist($template);
-        }
-
-        $manager->flush();
-        */
-
         $response = file_get_contents('https://api.imgflip.com/get_memes');
 
         $templates = json_decode($response, true);
@@ -40,5 +28,10 @@ class TemplateFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['template'];
     }
 }

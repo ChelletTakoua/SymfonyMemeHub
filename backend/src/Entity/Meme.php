@@ -12,6 +12,12 @@ use Doctrine\ORM\Mapping as ORM;
     ORM\Entity(repositoryClass: MemeRepository::class),
     ORM\HasLifecycleCallbacks()
 ]
+//TODO : Increment the number of likes when a like is added here is the code to do it:
+
+//        $meme = $like->getMeme();
+//        $meme->setNumLikes($meme->getNumLikes() + 1);
+//        $this->entityManager->persist($meme);
+//        $this->entityManager->flush();
 class Meme
 {
     #[ORM\Id]

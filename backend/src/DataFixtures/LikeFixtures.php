@@ -7,8 +7,9 @@ use App\Entity\Meme;
 use App\Entity\User;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
-class LikeFixtures extends Fixture
+class LikeFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads Like fixtures into the database.
@@ -45,5 +46,18 @@ class LikeFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            MemeFixtures::class,
+            UserFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['like'];
     }
 }

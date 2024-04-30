@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Meme;
 use App\Entity\User;
 use App\Entity\BlockedMeme;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class BlockedMemeFixtures extends Fixture
+class BlockedMemeFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads BlockedMeme fixtures into the database.
@@ -36,7 +37,6 @@ class BlockedMemeFixtures extends Fixture
         foreach ($memes as $meme) {
             $blockedMeme = new BlockedMeme();
             $blockedMeme->setMeme($meme);
-            $blockedMeme->setBlockDate(new \DateTime());
             $admin = $manager->getRepository(User::class)->findOneBy([], ['id' => 'ASC']);
             $blockedMeme->setAdmin($admin);
 
@@ -44,5 +44,18 @@ class BlockedMemeFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            MemeFixtures::class,
+            UserFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['blockedMeme'];
     }
 }

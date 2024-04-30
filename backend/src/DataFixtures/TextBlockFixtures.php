@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\Meme;
 use App\Entity\TextBlock;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class TextBlockFixtures extends Fixture
+class TextBlockFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads TextBlock fixtures into the database.
@@ -39,5 +40,17 @@ class TextBlockFixtures extends Fixture
 
             $manager->flush();
         }
+    }
+
+    public function getDependencies()
+    {
+        return [
+            MemeFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['textblock'];
     }
 }

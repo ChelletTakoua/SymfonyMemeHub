@@ -4,10 +4,11 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\BannedUser;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class BannedUserFixtures extends Fixture
+class BannedUserFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads BannedUser fixtures into the database.
@@ -34,7 +35,6 @@ class BannedUserFixtures extends Fixture
         foreach ($users as $user) {
             $bannedUser = new BannedUser();
             $bannedUser->setUser($user);
-            $bannedUser->setBanDate(new \DateTime());
             $bannedUser->setBanDuration(rand(1, 30));
             $bannedUser->setReason('Test reason');
 
@@ -42,5 +42,17 @@ class BannedUserFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            UserFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['bannedUser'];
     }
 }

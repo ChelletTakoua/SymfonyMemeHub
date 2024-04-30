@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Meme;
 use App\Entity\User;
 use App\Entity\Template;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class MemeFixtures extends Fixture
+class MemeFixtures extends Fixture implements FixtureGroupInterface
 {
     /**
      * Loads Meme fixtures into the database.
@@ -27,11 +28,8 @@ class MemeFixtures extends Fixture
             for ($i = 0; $i < 2; $i++) {
                 $meme = new Meme();
                 $meme->setTitle('Example Meme ' . $i);
-                $meme->setCreationDate(new \DateTime());
-                $meme->setNumLikes(0);
                 $meme->setUser($user);
-
-                $meme->setTemplate($templates[array_rand($templates)]);
+                $meme->setTemplate($templates[0]);
 
                 $manager->persist($meme);
             }
@@ -39,4 +37,19 @@ class MemeFixtures extends Fixture
 
         $manager->flush();
     }
+
+    public function getDependencies(): array
+    {
+        return [
+            UserFixtures::class,
+            TemplateFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['meme'];
+    }
+
+
 }

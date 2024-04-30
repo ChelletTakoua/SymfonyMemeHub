@@ -24,7 +24,7 @@ class BannedUser
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $banDate = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $banDuration = null;
 
     #[ORM\Column(length: 255)]

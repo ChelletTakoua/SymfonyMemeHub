@@ -5,10 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Meme;
 use App\Entity\User;
 use App\Entity\Report;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
-class ReportFixtures extends Fixture
+class ReportFixtures extends Fixture implements FixtureGroupInterface
 {
 
     /**
@@ -35,8 +36,6 @@ class ReportFixtures extends Fixture
                 if (!$existingReport) {
                     $report = new Report();
                     $report->setReason('Inappropriate content');
-                    $report->setReportDate(new \DateTime());
-                    $report->setStatus('resolved');
                     $report->setMeme($meme);
                     $report->setUser($user);
 
@@ -47,5 +46,18 @@ class ReportFixtures extends Fixture
             }
         }
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            MemeFixtures::class,
+            UserFixtures::class,
+        ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['report'];
     }
 }
