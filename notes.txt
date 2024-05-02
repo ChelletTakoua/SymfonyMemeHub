@@ -17,8 +17,8 @@ Project Setup:
     composer require --dev doctrine/doctrine-fixtures-bundle
 
 2. Load initial data fixtures into the database:
-    symfony console doctrine:fixtures:load --append
-    (Note: You can omit '--append' to replace existing data. 
+    symfony console doctrine:fixtures:load --group='master'
+    (Note: You can add '--append'. 
     Including '--append' adds fixtures without purging existing data.)
 
 If you encounter any issues with Composer, ask @louey to provide you with the php.ini file and try adding the given configuration to your php.ini file.
