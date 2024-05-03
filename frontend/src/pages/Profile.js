@@ -29,10 +29,10 @@ const Profile = () => {
     const fetchUser = async (id) => {
       try {
         const res = await userApi.getUserProfile(id);
-        setUsername(res?.data.data.user.username);
-        setEmail(res?.data.data.user.email);
-        setProfileImage(res?.data.data.user.profile_pic);
-        setRegDate(res?.data.data.user.reg_dat);
+        setUsername(res?.data.user.username);
+        setEmail(res?.data.user.email);
+        setProfileImage(res?.data.user.profile_pic);
+        setRegDate(res?.data.user.reg_dat);
       } catch (error) {
         navigate("/not_found");
       }
@@ -41,7 +41,7 @@ const Profile = () => {
     const fetchMemes = async (id) => {
       try {
         const res = await memeApi.getUserMemes(id);
-        setMemes(res?.data.data.memes);
+        setMemes(res?.data.memes);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

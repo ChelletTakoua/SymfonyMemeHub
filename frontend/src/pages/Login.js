@@ -5,6 +5,7 @@ import { AppContext } from "../context/AppContext";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { login, toast } = useContext(AppContext);
 
@@ -30,7 +31,13 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
-      await login(username, password);
+      try {
+        setIsLoading(true);
+        await login(username, password);
+      } catch (error) {
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -80,14 +87,22 @@ const Login = () => {
                 onChange={handlePasswordChange}
               />
             </div>
-
-            <button
-              type="submit"
-              className="w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
-            >
-              Sign in
-            </button>
-
+            {!isLoading ? (
+              <button
+                type="submit"
+                className="w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+              >
+                Sign in
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled
+                className="w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-400 "
+              >
+                Signing in...
+              </button>
+            )}
             <p className="text-sm font-light text-gray-400">
               Don't have an account yet?
               <Link to="/register" className="hover:underline text-primary-400">

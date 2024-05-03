@@ -19,7 +19,7 @@ export default function MemeEdit() {
     const fetchTemplates = async () => {
       try {
         const res = await templateApi.getAllTemplates();
-        setMemes(res?.data.data.templates);
+        setMemes(res?.data.templates);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -27,9 +27,9 @@ export default function MemeEdit() {
     const fetchMeme = async (id) => {
       try {
         const res = await memeApi.getMemeById(id);
-        if (res?.data.data.meme.user_id !== user.id) navigate("/");
-        const memeData = { ...res?.data.data.meme };
-        memeData.inputBoxes = res?.data.data.meme.text_blocks;
+        if (res?.data.meme.user_id !== user.id) navigate("/");
+        const memeData = { ...res?.data.meme };
+        memeData.inputBoxes = res?.data.meme.text_blocks;
         delete memeData.text_blocks;
         setCurrMeme(memeData);
       } catch (error) {

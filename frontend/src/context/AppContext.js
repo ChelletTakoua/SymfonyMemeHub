@@ -14,7 +14,7 @@ const AppProvider = ({ children }) => {
   const checkAuth = useCallback(async () => {
     try {
       const res = await userApi.getUserAuth();
-      setUser(res.data.data.user);
+      setUser(res.data.user);
     } catch (error) {
       setUser(null);
     }
@@ -39,7 +39,7 @@ const AppProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       const res = await api.login({ username, password });
-      setUser(res?.data.data.user);
+      setUser(res?.data.user);
       toast.success(`Welcome back, ${username}`);
       navigate("/");
     } catch (error) {
