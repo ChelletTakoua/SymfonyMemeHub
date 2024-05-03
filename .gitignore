@@ -2,5 +2,5 @@
 /.idea
 .idea/workspace.xml
 backend/composer.lock
-.idea/workspace.xml
-/.idea
+/frontend/node_modules
+/frontend/package-lock.json
