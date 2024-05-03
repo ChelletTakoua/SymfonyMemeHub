@@ -6,7 +6,7 @@ use App\Repository\TextBlockRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TextBlockRepository::class)]
-class TextBlock
+class TextBlock implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -95,4 +95,15 @@ class TextBlock
     }
 
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'text' => $this->text,
+            'x' => $this->x,
+            'y' => $this->y,
+            'fontSize' => $this->fontSize,
+            //'meme' => $this->meme,
+        ];
+    }
 }

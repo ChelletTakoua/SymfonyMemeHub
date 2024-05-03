@@ -3,3 +3,9 @@
 /frontend/node_modules
 /frontend/package-lock.json
 
+.idea/workspace.xml
+backend/composer.lock
+.idea/workspace.xml
+/vendor
+*.xml
+backend/composer.lock

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 #[
     ORM\Entity(repositoryClass: MemeRepository::class),
@@ -18,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 //        $meme->setNumLikes($meme->getNumLikes() + 1);
 //        $this->entityManager->persist($meme);
 //        $this->entityManager->flush();
-class Meme
+class Meme implements JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -102,7 +103,7 @@ class Meme
         return $this;
     }
 
-    public function getResultImg()
+    public function getResultImg(): mixed
     {
         return $this->resultImg;
     }
@@ -237,4 +238,23 @@ class Meme
         $this->resultImg = $defaultResultImg ;
     }
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            "id" => $this->getId(),
+            "template" => $this->getTemplate(),
+            "user_id" =>  $this->getUser()->getId(), //TODO: does this trigger a fetch from the database
+            "nb_likes" => $this->getNbLikes(),
+            "liked" => "not implemented",
+            "creation_date" => $this->getCreationDate(),
+            "text_blocks" => $this->getTextBlocks(),
+            "result_img" => stream_get_contents($this->getResultImg())
+        ];
+    }
+
+    private function getNbLikes()
+    {
+        //TOOD: to implement
+        return 2;
+    }
 }

@@ -18,7 +18,7 @@ use Doctrine\Common\Collections\ArrayCollection;
     ORM\HasLifecycleCallbacks()
 ]
 #[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -339,4 +339,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->profilePic = $default_pp;
     }
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'email' => $this->email,
+            'registrationDate' => $this->registrationDate,
+            'isVerified' => $this->isVerified,
+            'roles' => $this->roles,
+            'profilePic' => $this->profilePic
+        ];
+        //TODO: changed reg_dat to registrationDate, is_verified to isVerified, profile_pic to profilePic
+        // @yessine sallemi
+    }
 }

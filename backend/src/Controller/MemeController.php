@@ -40,6 +40,8 @@ class MemeController extends AbstractController
         });
         return $this->json($memes);
     }
+
+
     #[Route('/memes/add', name: 'add_meme')]
     public function addMeme(Request $request, ?User $user): Response
     {
@@ -65,7 +67,7 @@ class MemeController extends AbstractController
         foreach ($requestBody['text_blocks'] as $textBlock) {
             $tb = new TextBlock();
             $tb->setText($textBlock['text']);
-            $tb->setX($textBlock['x']);
+                 $tb->setX($textBlock['x']);
             $tb->setY($textBlock['y']);
             $tb->setFontSize($textBlock['font_size']);
             $tb->setMeme($meme);
