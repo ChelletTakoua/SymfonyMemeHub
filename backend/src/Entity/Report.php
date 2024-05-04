@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     ORM\HasLifecycleCallbacks()
 ]
 #[UniqueEntity(fields: ['user', 'meme'])]
-class Report
+class Report implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -126,4 +126,15 @@ class Report
         $this->status = 'pending';
     }
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'reason' => $this->reason,
+            'reportDate' => $this->reportDate,
+            'meme' => $this->meme,
+            'user' => $this->user,
+            'status' => $this->status
+        ];
+    }
 }

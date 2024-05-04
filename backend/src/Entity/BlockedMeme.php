@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
     ORM\Entity(repositoryClass: BlockedMemeRepository::class),
     ORM\HasLifecycleCallbacks()
 ]
-class BlockedMeme
+class BlockedMeme implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -115,4 +115,13 @@ class BlockedMeme
         $this->blockDate = new \DateTime();
     }
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'meme' => $this->meme,
+            'admin' => $this->admin,
+            'report' => $this->report,
+        ];
+    }
 }

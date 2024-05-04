@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
     "this.getURL() !== null or this.getImg() !== null",
     message: "Either URL or img must be provided."
 )]
-class Template
+class Template implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -107,5 +107,15 @@ class Template
         }
 
         return $this;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'url' => $this->URL,
+            //'img' => $this->img,
+        ];
     }
 }

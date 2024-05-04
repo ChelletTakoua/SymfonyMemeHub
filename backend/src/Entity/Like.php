@@ -10,7 +10,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 #[ORM\Table(name: '`like`')]
 #[UniqueEntity(fields: ['user', 'meme'])]
 
-class Like
+class Like implements \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -54,4 +54,12 @@ class Like
         return $this;
     }
 
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'user' => $this->user,
+            'meme' => $this->meme
+        ];
+    }
 }

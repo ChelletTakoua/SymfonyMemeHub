@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -329,5 +329,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->roles []= 'ROLE_USER';
         $this->verified = 0;
         $this->profilePic = $default_pp;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'id' => $this->id,
+            'username' => $this->username,
+            'email' => $this->email,
+            'registrationDate' => $this->registrationDate,
+            'isVerified' => $this->verified,
+            'roles' => $this->roles,
+            'profilePic' => $this->profilePic
+        ];
+        //TODO: changed reg_dat to registrationDate, is_verified to isVerified, profile_pic to profilePic
+        // @yessine sallemi
     }
 }
