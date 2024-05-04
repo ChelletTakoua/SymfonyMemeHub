@@ -1,7 +1,7 @@
 const BASE_URL = "http://localhost:8000/";
 
 const USER_API_ROUTES = {
-  CHECK_AUTH: "/checkAuth",
+  CHECK_AUTH: "/check_auth",
   GET_USER_PROFILE: "/user/:id",
   MODIFY_PASSWORD: "/user/profile/modifyPassword",
   EDIT_PROFILE: "/user/profile/edit",

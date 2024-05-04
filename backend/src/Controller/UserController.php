@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends AbstractController
 {
@@ -19,6 +21,12 @@ class UserController extends AbstractController
     {
         $this->doctrine = $doctrine;
         $this->repo = $this->doctrine->getRepository(User::class);
+    }
+
+    #[Route('/profile', name: 'profile')]
+    public function profile(#[CurrentUser] ?User $user): Response
+    {
+        return $this->json(['user' => $user,'memes' => $user->getMemes()], Response::HTTP_OK); 
     }
 
     #[Route('/forgotPassword/{username}', name: 'forgot_password')]

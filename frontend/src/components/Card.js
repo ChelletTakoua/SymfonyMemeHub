@@ -22,8 +22,8 @@ export default function Card({ meme }) {
     const fetchUser = async (id) => {
       try {
         const res = await userApi.getUserProfile(id);
-        setUsername(res?.data.data.user.username);
-        setProfileImage(res?.data.data.user.profile_pic);
+        setUsername(res?.data.user.username);
+        setProfileImage(res?.data.user.profilePic);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

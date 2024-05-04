@@ -29,10 +29,10 @@ const Profile = () => {
     const fetchUser = async (id) => {
       try {
         const res = await userApi.getUserProfile(id);
-        setUsername(res?.data.data.user.username);
-        setEmail(res?.data.data.user.email);
-        setProfileImage(res?.data.data.user.profile_pic);
-        setRegDate(res?.data.data.user.reg_dat);
+        setUsername(res?.data.user.username);
+        setEmail(res?.data.user.email);
+        setProfileImage(res?.data.user.profilePic);
+        setRegDate(res?.data.user.registrationDate);
       } catch (error) {
         navigate("/not_found");
       }
@@ -41,7 +41,7 @@ const Profile = () => {
     const fetchMemes = async (id) => {
       try {
         const res = await memeApi.getUserMemes(id);
-        setMemes(res?.data.data.memes);
+        setMemes(res?.data.memes);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -50,8 +50,8 @@ const Profile = () => {
     if (isOwner) {
       setEmail(user?.email);
       setUsername(user?.username);
-      setProfileImage(user?.profile_pic);
-      setRegDate(user?.reg_dat);
+      setProfileImage(user?.profilePic);
+      setRegDate(user?.registrationDate);
     } else {
       fetchUser(id);
     }
@@ -107,7 +107,7 @@ const Profile = () => {
         updatedData.email = email;
       }
       if (profileImageChanged.current) {
-        updatedData.profile_pic = profileImage;
+        updatedData.profilePic = profileImage;
       }
       try {
         userApi.editUserProfile(updatedData);
@@ -182,7 +182,7 @@ const Profile = () => {
             <div className="w-11/12">
               <h2 className="text-2xl font-bold mb-8 text-white">My Memes</h2>
               <div className="grid grid-cols-3 gap-6 mt-2">
-                {memes.length === 0 && ( // If there are no memes //TODO: make this better
+                {memes?.length === 0 && ( // If there are no memes //TODO: make this better
                   <div className="flex flex-col items-center justify-center gap-4">
                     <div className="text-black">No memes to show.</div>
                     <Link to="/create">

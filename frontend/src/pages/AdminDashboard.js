@@ -19,7 +19,7 @@ const AdminDashboard = () => {
   const fetchReports = useCallback(async () => {
     try {
       const res = await adminApi.getAllReports();
-      setReports(res.data.data.reports);
+      setReports(res.data.reports);
     } catch (error) {
       console.error("Error fetching data:", error);
       toast.error("Failed to fetch reports");
@@ -32,20 +32,20 @@ const AdminDashboard = () => {
       setStats((prev) => {
         return {
           ...prev,
-          totalUsers: res?.data.data.users.length,
+          totalUsers: res?.data.users.length,
         };
       });
       // Update the admins list
-      setAdmins(res?.data.data.users.filter((user) => user.role === "admin"));
+      setAdmins(res?.data.users.filter((user) => user.role === "admin"));
       // Update the users list
-      setUsers(res?.data.data.users.filter((el) => el.id !== user.id));
+      setUsers(res?.data.users.filter((el) => el.id !== user.id));
 
       // Fetch the total memes
       const resMemes = await memeApi.getAllMemes();
       setStats((prev) => {
         return {
           ...prev,
-          totalMemes: resMemes?.data.data.memes.length,
+          totalMemes: resMemes?.data.memes.length,
         };
       });
     } catch (error) {
@@ -58,7 +58,7 @@ const AdminDashboard = () => {
     const fetchDevModeStatus = async () => {
       try {
         const res = await adminApi.getDebugModeStatus();
-        setBackendDevMode(res.data.data.devMode);
+        setBackendDevMode(res.data.devMode);
       } catch (error) {
         console.error("Error fetching data:", error);
         toast.error("Failed to fetch development mode status");
@@ -93,7 +93,7 @@ const AdminDashboard = () => {
   const handleViewMeme = async (memeId) => {
     try {
       const res = await memeApi.getMemeById(memeId);
-      setViewedImg(`data:image/png;base64,${res.data.data.meme.result_img}`);
+      setViewedImg(`data:image/png;base64,${res.data.meme.result_img}`);
     } catch (error) {
       toast.error("Failed to view meme");
     }
@@ -110,10 +110,12 @@ const AdminDashboard = () => {
   };
 
   const handleOpenDebugging = () => {
-    if(backendDevMode){
+    if (backendDevMode) {
       window.location.href = adminApi.debugModePage;
-    }else{
-      toast.error("Development mode is disabled. Start the backend server in development mode or enable it manually in the backend config files.");
+    } else {
+      toast.error(
+        "Development mode is disabled. Start the backend server in development mode or enable it manually in the backend config files."
+      );
     }
   };
 
@@ -123,15 +125,14 @@ const AdminDashboard = () => {
         <h1 className="text-2xl font-bold mb-4">
           Welcome to the Admin Dashboard
         </h1>
-          <button
-            className={`absolute top-8 right-8 px-4 py-2 text-white rounded ${
-              backendDevMode ? "bg-gray-900" : "bg-gray-300"
-            }`}
-            onClick={handleOpenDebugging}
-          >
-            Debugging
-          </button>
-      
+        <button
+          className={`absolute top-8 right-8 px-4 py-2 text-white rounded ${
+            backendDevMode ? "bg-gray-900" : "bg-gray-300"
+          }`}
+          onClick={handleOpenDebugging}
+        >
+          Debugging
+        </button>
 
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-2">Admin Profiles</h2>

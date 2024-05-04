@@ -5,6 +5,7 @@ import { AppContext } from "../context/AppContext";
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { login, toast } = useContext(AppContext);
 
@@ -30,7 +31,9 @@ const Login = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
+      setIsLoading(true);
       await login(username, password);
+      setIsLoading(false);
     }
   };
 
@@ -83,9 +86,13 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+              className={
+                !isLoading
+                  ? "w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+                  : "w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 cursor-not-allowed"
+              }
             >
-              Sign in
+              {isLoading ? "Loading..." : "Sign in"}
             </button>
 
             <p className="text-sm font-light text-gray-400">

@@ -9,7 +9,7 @@ const Home = () => {
     const fetchMemes = async () => {
       try {
         const res = await memeApi.getAllMemes();
-        setMemes(res?.data.data.memes);
+        setMemes(res?.data.memes);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

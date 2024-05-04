@@ -7,6 +7,7 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { register, toast } = useContext(AppContext);
 
@@ -52,7 +53,9 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateForm()) {
+      setIsLoading(true);
       await register(username, email, password);
+      setIsLoading(false);
     }
   };
 
@@ -162,9 +165,13 @@ const Register = () => {
             </div>
             <button
               type="submit"
-              className="w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+              className={
+                !isLoading
+                  ? "w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 hover:bg-primary-700 focus:ring-primary-800"
+                  : "w-full text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-primary-600 cursor-not-allowed"
+              }
             >
-              Register Now
+              {isLoading ? "Loading..." : "Register Now"}
             </button>
           </form>
         </div>
