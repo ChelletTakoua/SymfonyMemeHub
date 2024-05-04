@@ -26,9 +26,3 @@ services:
         tags:
             - { name: doctrine.event_subscriber }
 
-
-
-    App\EventListener\RequestResponseDebugListener:
-        tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
