@@ -22,4 +22,6 @@ Project Setup:
     Including '--append' adds fixtures without purging existing data.)
 
 If you encounter any issues with Composer, ask @louey to provide you with the php.ini file and try adding the given configuration to your php.ini file.
+----------------------------------------------------------------
+TODO : @louey created custom queries (Order BY ... for the search functionality) in the repository classes.
 
