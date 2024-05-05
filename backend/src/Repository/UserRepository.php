@@ -39,24 +39,92 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-/**
- * @return User[] Returns an array of User objects
- * 
- */
+    /** gets all the users the ordered by username ASC
+     * @return User[] Returns an array of User objects
+     */
     public function findByRole($role) :array
-{
-    return $this->createQueryBuilder('u')
-        ->andWhere('u.roles = :role')
-        ->setParameter('role', '["'.$role.'"]')
-        ->getQuery()
-        ->getResult();
-}
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.roles = :role')
+            ->setParameter('role', '["'.$role.'"]')
+            ->getQuery()
+            ->getResult();
+    }
 
-    public function findByUsername($username): ?User
+    /**gets all the users that match the search term ordered by username ASC
+     * @param $username
+     * @return User[] Returns an array of User objects
+     */
+    public function findByUsername($username): array
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.username LIKE :username')
             ->setParameter('username', "%".$username."%")
+            ->orderBy('user.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**gets all the users that match the email provided ordered by username ASC
+     * @param $email
+     * @return User[] Returns an array of User objects
+     */
+    public function findByEmailASC($email): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email LIKE :email')
+            ->setParameter('email', "%".$email."%")
+            ->orderBy('user.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**gets all the users that match the email provided ordered by username DESC
+     * @param $email
+     * @return User[] Returns an array of User objects
+     */
+    public function findByEmailDESC($email): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email LIKE :email')
+            ->setParameter('email', "%".$email."%")
+            ->orderBy('user.username', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**gets all the users ordered by their registration ASC
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllOrderedByRegisterDate(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->orderBy('user.registeredAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**gets all the users ordered by their registration DESC
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllOrderedByRegisterDateDesc(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->orderBy('user.registeredAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**gets all the users that are verified ordered by username ASC
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllVerified(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.isVerified = :verified')
+            ->setParameter('verified', true)
+            ->orderBy('user.username', 'ASC')
             ->getQuery()
             ->getResult();
     }
