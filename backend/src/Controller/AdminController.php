@@ -31,13 +31,13 @@ class AdminController extends AbstractController
     #[Route('/admin/users', name: 'all_users')]
     public function getAllUsers(): JsonResponse
     {
-        $users = $this->repo->getByRole("ROLE_USER");
+        $users = $this->repo->findByRole("ROLE_USER");
+
         if (!$users) {
             throw new NotFoundHttpException("No users found");
-        
-        } else {
-            return new JsonResponse(['users' => $users], Response::HTTP_OK);
         }
+
+        return new JsonResponse(['users' => $users], Response::HTTP_OK);
     }
      
     /** gets all the admins and sends them in the response
@@ -48,22 +48,15 @@ class AdminController extends AbstractController
     public function getAdminDashboard(): JsonResponse
     {
         
-        $admins = $this->repo->getByRole("ROLE_ADMIN");
-            
-            
+        $admins = $this->repo->findByRole("ROLE_ADMIN");
 
         if ($admins) {
             return $this->json(['admins' => $admins], Response::HTTP_OK);
-        } else {
-            throw new NotFoundHttpException("No admins found");
         }
-       }
 
+        throw new NotFoundHttpException("No admins found");
+    }
 
-       
-    
-
-    
      /** takes in a user id and sends the user profile in the response
      * @param $id
      * @throws NotFoundHttpException
@@ -74,13 +67,12 @@ class AdminController extends AbstractController
         $user = $this->repo->find($id);
         if ($user) {
             return new JsonResponse(['user' => $user], Response::HTTP_OK);
-        } else {
-            throw new NotFoundHttpException("User not found");
         }
+
+        throw new NotFoundHttpException("User not found");
     }
     
      /** takes in a user id and changes the role of the user which is specified in the body of the request
-     * @param $id
      * @throws NotFoundHttpException
      * @throws BadRequestException
      */

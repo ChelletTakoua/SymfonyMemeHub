@@ -27,19 +27,23 @@ class UserController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(#[CurrentUser] ?User $user): Response
     {
-        return $this->json(['user' => $user,'memes' => $user->getMemes()], Response::HTTP_OK); 
+        return $this->json(['user' => $user,
+                                    'memes' => $user->getMemes()],
+                                    Response::HTTP_OK);
     }
 
-    #[Route('/forgotPassword/{username}', name: 'forgot_password')]
-    public function forgotPassword($username): Response
-    {
-        $user = $this->repo->findOneBy(['username' => $username]);
-        if (!$user) {
-            throw new NotFoundHttpException("User not found");
-        }
-        //Mail Service
-        return new Response('');
-    }
+//      TODO: mailing Service
+//    #[Route('/forgotPassword/{username}', name: 'forgot_password')]
+//    public function forgotPassword($username): Response
+//    {
+//        $user = $this->repo->findOneBy(['username' => $username]);
+//        if (!$user) {
+//            throw new NotFoundHttpException("User not found");
+//        }
+//        //Mail Service
+//        return new Response('');
+//    }
+
     // #[Route('/resetPassword', name: 'reset_password')]
     // public function resetPassword(): Response
     // {
@@ -47,19 +51,20 @@ class UserController extends AbstractController
     //     return new Response('');
     // }
 
-    #[Route('/sendVerificationEmail/{username}', name: 'send_verification_email')]
-    public function sendVerificationEmail($username): Response
-    {
-        $user = $this->repo->findOneBy(['username' => $username]);
-        if (!$user) {
-            throw new NotFoundHttpException("User not found");
-        }
-        //Mail Service
-        return $this->json([
-            'status' => 'success',
-            'code' => 200
-        ]);
-    }
+
+//    #[Route('/sendVerificationEmail/{username}', name: 'send_verification_email')]
+//    public function sendVerificationEmail($username): Response
+//    {
+//        $user = $this->repo->findOneBy(['username' => $username]);
+//        if (!$user) {
+//            throw new NotFoundHttpException("User not found");
+//        }
+//        //Mail Service
+//        return $this->json([
+//            'status' => 'success',
+//            'code' => 200
+//        ]);
+//    }
 
     // #[Route('/verifyEmail', name: 'verify_email')]
     // public function verifyEmail(): Response
@@ -107,9 +112,9 @@ class UserController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->json(["user" => $user]);
-        } else {
-            throw new BadRequestHttpException("A parameter must be provided");
         }
+
+        throw new BadRequestHttpException("A parameter must be provided");
     }
 
     #[Route('/user/profile', name: 'delete_profile')]
