@@ -26,5 +26,11 @@ Project Setup:
 
 If you encounter any issues with Composer, ask @louey to provide you with the php.ini file and try adding the given configuration to your php.ini file.
 ----------------------------------------------------------------
-TODO : @louey created custom queries (Order BY ... for the search functionality) in the repository classes.
-
+TODO : 
+- @louey created custom queries (Order BY ... for the search functionality) in the repository classes.
+- verify routes ( add reg.exp if needed )
+- verify constraints 
+- mailing
+- repositories
+- authentication 
+- 
