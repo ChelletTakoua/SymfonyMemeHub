@@ -9,8 +9,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use function Doctrine\ORM\Mapping\LifecycleCallbacks;
 
-#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[
+    ORM\Entity(repositoryClass: UserRepository::class),
+    ORM\HasLifecycleCallbacks()
+]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSerializable
 {
     #[ORM\Id]
