@@ -4,17 +4,18 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Controller\BadRequestException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
+#[Route('/admin')]
 class AdminController extends AbstractController
 {
     private ManagerRegistry $doctrine;
@@ -28,7 +29,7 @@ class AdminController extends AbstractController
     /** gets all the users and sends them in the response
      * @throws NotFoundHttpException
      */
-    #[Route('/admin/users', name: 'all_users')]
+    #[Route('/users', name: 'all_users')]
     public function getAllUsers(): JsonResponse
     {
         $users = $this->repo->findByRole("ROLE_USER");
@@ -44,7 +45,7 @@ class AdminController extends AbstractController
      * @throws NotFoundHttpException
      */
 
-    #[Route('/admin', name: 'admin_dashboard')]
+    #[Route('/', name: 'admin_dashboard')]
     public function getAdminDashboard(): JsonResponse
     {
 
@@ -61,7 +62,7 @@ class AdminController extends AbstractController
      * @param $id
      * @throws NotFoundHttpException
      */
-    #[Route('/admin/user/{id}', name: 'user_profile')]
+    #[Route('/user/{id}', name: 'user_profile')]
     public function getUserProfile($id): JsonResponse
     {
         $user = $this->repo->find($id);
