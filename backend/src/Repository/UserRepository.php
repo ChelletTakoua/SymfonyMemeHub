@@ -55,12 +55,26 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * @param $username
      * @return User[] Returns an array of User objects
      */
-    public function findByUsername($username): array
+    public function findByUsernameASC($username): array
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.username LIKE :username')
             ->setParameter('username', "%".$username."%")
             ->orderBy('user.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+        /**gets all the users that match the search term ordered by username DESC
+     * @param $username
+     * @return User[] Returns an array of User objects
+     */
+    public function findByUsernameDESC($username): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.username LIKE :username')
+            ->setParameter('username', "%".$username."%")
+            ->orderBy('user.username', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -96,7 +110,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**gets all the users ordered by their registration ASC
      * @return User[] Returns an array of User objects
      */
-    public function findAllOrderedByRegisterDate(): array
+    public function findAllOrderedByRegisterDateASC(): array
     {
         return $this->createQueryBuilder('user')
             ->orderBy('user.registeredAt', 'ASC')
@@ -107,7 +121,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**gets all the users ordered by their registration DESC
      * @return User[] Returns an array of User objects
      */
-    public function findAllOrderedByRegisterDateDesc(): array
+    public function findAllOrderedByRegisterDateDESC(): array
     {
         return $this->createQueryBuilder('user')
             ->orderBy('user.registeredAt', 'DESC')
@@ -119,12 +133,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**gets all the users that are verified ordered by username ASC
      * @return User[] Returns an array of User objects
      */
-    public function findAllVerified(): array
+    public function findAllVerifiedASC(): array
     {
         return $this->createQueryBuilder('user')
             ->andWhere('user.isVerified = :verified')
             ->setParameter('verified', true)
             ->orderBy('user.username', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**gets all the users that are verified ordered by username DESC
+     * @return User[] Returns an array of User objects
+     */
+    public function findAllVerifiedDESC(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.isVerified = :verified')
+            ->setParameter('verified', true)
+            ->orderBy('user.username', 'DESC')
             ->getQuery()
             ->getResult();
     }
