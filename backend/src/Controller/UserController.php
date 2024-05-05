@@ -27,6 +27,9 @@ class UserController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(#[CurrentUser] ?User $user): Response
     {
+        if(!$user){
+            return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+        }
         return $this->json(['user' => $user,
                                     'memes' => $user->getMemes()],
                                     Response::HTTP_OK);
