@@ -32,7 +32,7 @@ class AdminController extends AbstractController
     #[Route('/users', name: 'all_users')]
     public function getAllUsers(): JsonResponse
     {
-        $users = $this->repo->findByRole("ROLE_USER");
+        $users = $this->repo->findByRoleDESC("ROLE_USER");
 
         if (!$users) {
             throw new NotFoundHttpException("No users found");
@@ -49,7 +49,7 @@ class AdminController extends AbstractController
     public function getAdminDashboard(): JsonResponse
     {
 
-        $admins = $this->repo->findByRole("ROLE_ADMIN");
+        $admins = $this->repo->findByRoleASC("ROLE_ADMIN");
 
         if ($admins) {
             return $this->json(['admins' => $admins], Response::HTTP_OK);
