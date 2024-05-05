@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+
 class UserController extends AbstractController
 {
     private ManagerRegistry $doctrine;
