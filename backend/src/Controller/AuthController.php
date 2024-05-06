@@ -43,9 +43,9 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', name: 'login', methods: ['POST'])]
-    public function login(#[CurrentUser] ?User $user): JsonResponse
+    public function login(): JsonResponse
     {
-
+        $user= $this->getUser();
         if (!$user->isVerified()) {
             return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);
         }
@@ -60,11 +60,13 @@ class AuthController extends AbstractController
     }
 
     #[Route('/check_auth', name: 'check_auth')]
-    public function check_auth(#[CurrentUser] ?User $user): JsonResponse
+    public function check_auth(): JsonResponse
     {
+        $user = $this->getUser();
         if ($user) {
             return new JsonResponse(['user' => $user], Response::HTTP_OK);
         }
+        return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
     }
 
     #[Route('/access_denied', name: 'denied')]

@@ -25,8 +25,9 @@ class UserController extends AbstractController
     }
 
     #[Route('/profile', name: 'profile')]
-    public function profile(#[CurrentUser] ?User $user): Response
+    public function profile(): Response
     {
+        $user = $this->getUser();
         if(!$user){
             return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
@@ -77,12 +78,14 @@ class UserController extends AbstractController
     // }
 
     #[Route('/user/{id}', name: 'get_user_profile')]
-    public function getUserProfile($id): Response
+    public function getUserProfile(?User $user=null): Response
     {
-        $user = $this->repo->find($id);
+        //$user = $this->repo->find($id);
+
         if (!$user) {
             throw new NotFoundHttpException("User not found");
         }
+
         return $this->json(['user' => $user]);
     }
 

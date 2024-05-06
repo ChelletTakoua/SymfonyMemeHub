@@ -63,9 +63,8 @@ class AdminController extends AbstractController
      * @throws NotFoundHttpException
      */
     #[Route('/user/{id}', name: 'user_profile')]
-    public function getUserProfile($id): JsonResponse
+    public function getUserProfile(?User $user): JsonResponse
     {
-        $user = $this->repo->find($id);
         if ($user) {
             return new JsonResponse(['user' => $user], Response::HTTP_OK);
         }

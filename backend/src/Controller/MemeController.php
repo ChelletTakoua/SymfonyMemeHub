@@ -87,11 +87,9 @@ class MemeController extends AbstractController
     #[Route('/memes/{id}', name: 'get_meme_byId')]
     public function getMemeById(?Meme $meme=null): Response
     {
-        /*
-        $meme = $this->repo->findOneBy(['id' => $id]);
         if (!$meme) {
             throw new NotFoundHttpException("Meme not found");
-        }*/
+        }
         //$meme = $this->repo->findPaginated($id,5);
         return $this->json($meme);
     }

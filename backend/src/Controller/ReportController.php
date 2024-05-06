@@ -41,9 +41,9 @@ class ReportController extends AbstractController
      */
 
     #[Route('/admin/reports/{id}/resolve', name: 'resolve_report')]
-    public function resolveReport($id, #[CurrentUser]?User $admin): Response
+    public function resolveReport(Report $report): Response
     {
-        $report = $this->repo->find($id);
+        $admin = $this->getUser();
         if (!$report) {
             throw new NotFoundHttpException("Report not found");
         }
@@ -69,12 +69,8 @@ class ReportController extends AbstractController
      */
 
     #[Route('/admin/reports/{id}/ignore', name: 'ignore_report')]
-    public function ignoreReport($id): Response
+    public function ignoreReport(Report $report): Response
     {
-        $report = $this->doctrine->getRepository(Report::class)->find($id);
-        if (!$report) {
-            throw new NotFoundHttpException("Report not found");
-        }
         $report->setStatus('ignored');
        
         $blockedMeme = $report->getBlockedMeme();
