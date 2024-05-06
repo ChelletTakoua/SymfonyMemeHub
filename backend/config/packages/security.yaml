@@ -35,10 +35,9 @@ security:
   role_hierarchy:
     ROLE_ADMIN: ROLE_USER
   access_control:
-    - { path: ^/user, roles: ROLE_USER }
-    - { path: ^/profile, roles: ROLE_USER }
+    - { path: /user/profile/edit, roles: ROLE_USER }
     - { path: ^/logout, roles: ROLE_USER }
-    - { path: ^/memes, roles: ROLE_USER }
+    # - { path: ^/memes, roles: ROLE_USER }
     - { path: ^/templates, roles: ROLE_USER }
     - { path: ^/admin, roles: ROLE_ADMIN }
 

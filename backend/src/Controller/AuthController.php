@@ -17,7 +17,7 @@ class AuthController extends AbstractController
     #[Route('/register', name: 'register', methods: ['POST'])]
     public function register(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->toArray();
         $user = new User();
 
         if (empty($data['email']) || empty($data['username']) || empty($data['password'])) {

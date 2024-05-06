@@ -80,8 +80,6 @@ class UserController extends AbstractController
     #[Route('/user/{id}', name: 'get_user_profile')]
     public function getUserProfile(?User $user=null): Response
     {
-        //$user = $this->repo->find($id);
-
         if (!$user) {
             throw new NotFoundHttpException("User not found");
         }
@@ -96,12 +94,11 @@ class UserController extends AbstractController
     // }
 
     #[Route('/user/profile/edit', name: 'edit_profile',  methods: ['POST'])]
-    public function editProfile(Request $request, ?User $user): Response
+    public function editProfile(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
-        if (!empty($data) && (isset($data['username']) || isset($data['email']) || isset($data['profile_pic']))) {
-            $id = $user->getId();
-            $user = $this->repo->find($id);
+        $user= $this->getUser();
+        $data = $request->toArray();
+        if (!empty($data) && (isset($data['username']) || isset($data['email']) || isset($data['profilePic']))) {
             if (isset($data['username'])) {
                 $username = $data['username'];
                 $user->setUsername($username);
@@ -110,9 +107,10 @@ class UserController extends AbstractController
                 $email = $data['email'];
                 $user->setEmail($email);
             }
-            if (isset($data['profile_pic'])) {
-                $profile_pic = $data['profile_pic'];
-                $user->setProfilePic($profile_pic);
+            if (isset($data['profilePic'])) {
+                $profilePic = $data['profilePic'];
+                $profilePicBlob = fopen('data://text/plain;base64,' . base64_encode($profilePic), 'r');
+                $user->setProfilePic($profilePicBlob);
             }
             $entityManager = $this->doctrine->getManager();
             $entityManager->persist($user);
@@ -123,7 +121,7 @@ class UserController extends AbstractController
         throw new BadRequestHttpException("A parameter must be provided");
     }
 
-    #[Route('/user/profile', name: 'delete_profile')]
+    #[Route('/user/profile', name: 'delete_profile', methods: ['DELETE'])]
     public function deleteProfile(): Response
     {
         // Your code here

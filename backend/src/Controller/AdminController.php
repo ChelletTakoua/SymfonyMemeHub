@@ -78,7 +78,7 @@ class AdminController extends AbstractController
     #[Route('/admin/user/{id}/role', name: 'change_user_role', methods: ['POST'])]
     public function changeUserRole(Request $request, $id): Response
     {
-        $data = json_decode($request->getContent(), true);
+        $data = $request->toArray();
         if (empty($data['roles'])) {
             return new JsonResponse(['message' => 'Role required'], Response::HTTP_BAD_REQUEST);
         }

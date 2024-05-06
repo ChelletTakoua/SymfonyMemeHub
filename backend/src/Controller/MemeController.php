@@ -49,7 +49,7 @@ class MemeController extends AbstractController
     #[Route('/memes/add', name: 'add_meme')]
     public function addMeme(Request $request, ?User $user): Response
     {
-        $requestBody = json_decode($request->getContent(), true) ?? [];
+        $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
         }
@@ -128,7 +128,7 @@ class MemeController extends AbstractController
     #[Route('/memes/{id}/modify', name: 'modify_meme')]
     public function modifyMeme(Request $request, $id, ?User $user): Response
     {
-        $requestBody = json_decode($request->getContent(), true) ?? [];
+        $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
         }
@@ -212,7 +212,7 @@ class MemeController extends AbstractController
     #[Route('/memes/{id}/report', name: 'report_meme')]
     public function reportMeme($id, Request $request, ?User $user): Response
     {
-        $requestBody = json_decode($request->getContent(), true) ?? [];
+        $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
         }
