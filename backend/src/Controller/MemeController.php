@@ -34,10 +34,7 @@ class MemeController extends AbstractController
     #[Route('/memes', name: 'get_all_memes')]
     public function getAllMemes(): Response
     {
-        $memes =  $this->repo->findAll();
-        usort($memes, function ($a, $b) {
-            return $b->getCreationDate() <=> $a->getCreationDate();
-        });
+        $memes =  $this->repo->findBy([], ['creationDate' => 'DESC']);
         return $this->json($memes);
     }
     #[Route('/memes/add', name: 'add_meme')]
@@ -79,12 +76,14 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}', name: 'get_meme_byId')]
-    public function getMemeById($id): Response
+    public function getMemeById(Meme $meme): Response
     {
+        /*
         $meme = $this->repo->findOneBy(['id' => $id]);
         if (!$meme) {
             throw new NotFoundHttpException("Meme not found");
-        }
+        }*/
+        //$meme = $this->repo->findPaginated($id,5);
         return $this->json($meme);
     }
 
@@ -100,12 +99,8 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}/likes', name: 'get_meme_nb_likes')]
-    public function getMemeNbLikes($id, ?User $user): Response
+    public function getMemeNbLikes(Meme $meme, ?User $user): Response
     {
-        $meme = $this->repo->findOneBy(['id' => $id]);
-        if (!$meme) {
-            throw new NotFoundHttpException("Meme not found");
-        }
         if (!$user) {
             throw new NotFoundHttpException("User not logged in");
         }
