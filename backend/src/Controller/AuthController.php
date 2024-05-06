@@ -49,8 +49,7 @@ class AuthController extends AbstractController
         if (!$user->isVerified()) {
             return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);
         }
-        $response = new JsonResponse(['user' => $user ]);
-        return $response;
+        return new JsonResponse(['user' => $user ]);
     }
 
     #[Route('/logout', name: 'logout')]

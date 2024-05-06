@@ -123,7 +123,7 @@ class UserController extends AbstractController
         throw new BadRequestHttpException("A parameter must be provided");
     }
 
-    #[Route('/user/profile', name: 'delete_profile')]
+    #[Route('/user/profile', name: 'delete_profile', methods: ['DELETE'])]
     public function deleteProfile(): Response
     {
         // Your code here
