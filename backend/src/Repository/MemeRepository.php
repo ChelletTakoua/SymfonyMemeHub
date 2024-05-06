@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\BlockedMeme;
 use App\Entity\Meme;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -10,6 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @extends ServiceEntityRepository<Meme>
  *
  * @method Meme|null find($id, $lockMode = null, $lockVersion = null)
+ *
  */
 class MemeRepository extends ServiceEntityRepository
 {
@@ -17,7 +19,7 @@ class MemeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Meme::class);
     }
-    
+
 
     /*public function findRandomMeme(): ?Meme
     {
@@ -29,16 +31,17 @@ class MemeRepository extends ServiceEntityRepository
     }*/
 
 
-    public function findAll(bool $includeBlocked = false): array
+    public function findAll(bool $includeBlocked = true): array
     {
         return $this->getMemeBaseQuery($includeBlocked)
             ->getQuery()
             ->getResult();
     }
 
-    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null,bool $includeBlocked = false): array
+    public function findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null,bool $includeBlocked = true): array
     {
         $queryBuilder = $this->getMemeBaseQuery($includeBlocked);
+
 
         foreach ($criteria as $field => $value) {
             $queryBuilder->andWhere("m.$field = :$field")
@@ -63,18 +66,18 @@ class MemeRepository extends ServiceEntityRepository
     }
 
 
-    private function getMemeBaseQuery(bool $includeBlocked = false){
+    private function getMemeBaseQuery(bool $includeBlocked = true){
         $queryBuilder = $this->createQueryBuilder('m');
 
         if (!$includeBlocked) {
-            $queryBuilder->leftJoin('App\Entity\BlockedMeme', 'bm', 'WITH', 'm.id = bm.meme')
+            $queryBuilder->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
                 ->where('bm.meme IS NULL');
         }
 
         return $queryBuilder;
     }
 
-    public function findOneBy(array $criteria, array $orderBy = null,bool $includeBlocked = false): ?Meme
+    public function findOneBy(array $criteria, array $orderBy = null,bool $includeBlocked = true): ?Meme
     {
         $queryBuilder = $this->getMemeBaseQuery($includeBlocked);
 
@@ -101,8 +104,9 @@ class MemeRepository extends ServiceEntityRepository
      * @return Meme[]
      *
      */
-    public function findPaginated(int $page = 1, int $pageSize = -1, bool $includeBlocked = false): array
+    public function findPaginated(int $page = 1, int $pageSize = -1, bool $includeBlocked = true): array
     {
+
         if ($page < 1) {
             throw new \InvalidArgumentException('Page number cannot be less than 1.');
         }
@@ -113,22 +117,27 @@ class MemeRepository extends ServiceEntityRepository
 
         $offset = ($page - 1) * $pageSize;
 
-        return $this->getMemeBaseQuery($includeBlocked)
-            ->setFirstResult($offset)
-            ->setMaxResults($pageSize)
-            ->getQuery()
-            ->getResult();
+        return $this->findby([], ['creationDate' => 'DESC'], $pageSize, $offset, $includeBlocked);
     }
 
     public function memeIsBlocked(int $memeId): bool
     {
         return $this->createQueryBuilder('m')
-            ->select('COUNT(bm.id)')
-            ->leftJoin('App\Entity\BlockedMeme', 'bm', 'WITH', 'm.id = bm.meme')
-            ->where('m.id = :memeId')
-            ->setParameter('memeId', $memeId)
+                ->select('COUNT(bm.id)')
+                ->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
+                ->where('m.id = :memeId')
+                ->setParameter('memeId', $memeId)
+                ->getQuery()
+                ->getSingleScalarResult() > 0;
+    }
+
+    public function getTotalPages(int $pageSize, bool $includeBlocked = true): int
+    {
+        $totalMemes = $this->getMemeBaseQuery($includeBlocked)
+            ->select('COUNT(m.id)')
             ->getQuery()
-            ->getSingleScalarResult() > 0;
+            ->getSingleScalarResult();
+        return ceil($totalMemes / $pageSize);
     }
 
 //    /**
@@ -156,5 +165,5 @@ class MemeRepository extends ServiceEntityRepository
 //        ;
 //    }
 //  find like selon meme users asc username/meme created at selon date
-//  
+//
 }

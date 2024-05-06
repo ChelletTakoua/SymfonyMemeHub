@@ -32,10 +32,19 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes', name: 'get_all_memes')]
-    public function getAllMemes(): Response
+    public function getAllMemes(Request $request): Response
     {
-        $memes =  $this->repo->findBy([], ['creationDate' => 'DESC']);
-        return $this->json($memes);
+        $page = intval($request->query->get('page') ?? 1);
+        $pageSize = intval($request->query->get('pageSize') ?? -1);
+        $memes = $this->repo->findPaginated($page, $pageSize);
+        $result = [
+            'page' => $page,
+            'pageSize' => $pageSize,
+            'total' => count($memes),
+            'totalPages' => $this->repo->getTotalPages($pageSize),
+            'memes' => $memes,
+        ];
+        return $this->json($result);
     }
     #[Route('/memes/add', name: 'add_meme')]
     public function addMeme(Request $request, ?User $user): Response
@@ -76,7 +85,7 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}', name: 'get_meme_byId')]
-    public function getMemeById(Meme $meme): Response
+    public function getMemeById(?Meme $meme=null): Response
     {
         /*
         $meme = $this->repo->findOneBy(['id' => $id]);
