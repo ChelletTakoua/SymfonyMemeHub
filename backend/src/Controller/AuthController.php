@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class AuthController extends AbstractController
 {
@@ -49,8 +48,7 @@ class AuthController extends AbstractController
         if (!$user->isVerified()) {
             return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);
         }
-        $response = new JsonResponse(['user' => $user ]);
-        return $response;
+        return new JsonResponse(['user' => $user ]);
     }
 
     #[Route('/logout', name: 'logout')]
