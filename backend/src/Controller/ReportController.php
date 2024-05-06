@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class ReportController extends AbstractController
 {
     private ManagerRegistry $doctrine;
@@ -22,7 +22,9 @@ class ReportController extends AbstractController
         $this->doctrine = $doctrine;
         $this->repo = $this->doctrine->getRepository(Report::class);
     }
-
+    /**
+     * Get all reports in the database
+     */
 
     #[Route('/admin/reports', name: 'get_all_reports')]
     public function getAllReports(): Response
@@ -31,8 +33,15 @@ class ReportController extends AbstractController
         return $this->json(["reports" => $reports]);
     }
 
+     /**
+     * Resolve a report (changes the status to resolved and blocks the meme)
+     * @param $id - the id of the report
+     * @param $admin - the admin that resolved the report
+     * @return Response
+     */
+
     #[Route('/admin/reports/{id}/resolve', name: 'resolve_report')]
-    public function resolveReport($id, ?User $admin): Response
+    public function resolveReport($id, #[CurrentUser]?User $admin): Response
     {
         $report = $this->repo->find($id);
         if (!$report) {
@@ -52,22 +61,45 @@ class ReportController extends AbstractController
             'code' => 200
         ]);
     }
+    /**
+     * Ignore a report (changes the status to ignored and unblocks the meme)
+     * @param $id - the id of the report
+     * @param $admin - the admin that resolved the report
+     * @return Response
+     */
 
-
-
-    #[Route('/admin/reports/{id}/delete', name: 'delete_report')]
-    public function deleteReport($id): Response
+    #[Route('/admin/reports/{id}/ignore', name: 'ignore_report')]
+    public function ignoreReport($id): Response
     {
-        $report = $this->repo->find($id);
+        $report = $this->doctrine->getRepository(Report::class)->find($id);
         if (!$report) {
             throw new NotFoundHttpException("Report not found");
         }
-        $em = $this->doctrine->getManager();
-        $em->remove($report);
-        $em->flush();
+        $report->setStatus('ignored');
+       
+        $blockedMeme = $report->getBlockedMeme();
+        $report->setBlockedMeme(null);
+        $entityManager = $this->doctrine->getManager();
+        if ($blockedMeme) {
+            $entityManager->remove($blockedMeme);
+        }
+        $entityManager->persist($report);
+        $entityManager->flush();
         return $this->json([
             'status' => 'success',
             'code' => 200
         ]);
     }
+
+   
 }
+
+
+
+
+
+     
+   
+
+   
+   

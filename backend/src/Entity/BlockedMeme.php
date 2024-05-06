@@ -26,7 +26,6 @@ class BlockedMeme implements \JsonSerializable
     #[ORM\OneToMany(mappedBy: 'blockedMeme', targetEntity: report::class)]
     private Collection $report;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Meme $meme = null;
 
