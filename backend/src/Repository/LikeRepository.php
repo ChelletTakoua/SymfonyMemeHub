@@ -50,6 +50,18 @@ class LikeRepository extends ServiceEntityRepository
         ;
     }
 
+    public function findLikeByUserAndMeme($UserId, $MemeId)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.user = :userId')
+            ->andWhere('l.meme = :memeId')
+            ->setParameter('userId', $UserId)
+            ->setParameter('memeId', $MemeId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+    }
+
 //    public function findOneBySomeField($value): ?Like
 //    {
 //        return $this->createQueryBuilder('l')
