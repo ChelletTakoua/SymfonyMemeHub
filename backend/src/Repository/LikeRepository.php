@@ -20,21 +20,35 @@ class LikeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Like::class);
     }
-
-//    /**
-//     * @return Like[] Returns an array of Like objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('l')
-//            ->andWhere('l.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('l.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * Finds and returns all likes for a specific meme.
+     *
+     * @param int $MemeId The id of the meme to find likes for.
+     * @return Like[] Returns an array of Like objects that match the criteria.
+     *
+    */
+    public function findLikesByMeme($MemeId){
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.meme = :memeId')
+            ->setParameter('memeId', $MemeId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    /**
+     * Finds the likes associated with a specific user .
+     *
+     * @param int $UserId The ID of the user.
+     * @return User[] The array of likes associated with the user.
+     */
+    public function findLikesByUser($UserId){
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.user = :userId')
+            ->setParameter('userId', $UserId)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?Like
 //    {
