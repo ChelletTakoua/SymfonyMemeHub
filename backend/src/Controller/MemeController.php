@@ -163,8 +163,9 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}/like', name: 'like_meme')]
-    public function likeMeme($id, ?User $user): Response
+    public function likeMeme($id): Response
     {
+        $user = $this->getUser();
         if (!$user) {
             throw new NotFoundHttpException("User not logged in");
         }
