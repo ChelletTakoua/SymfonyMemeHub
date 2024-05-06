@@ -50,7 +50,7 @@ class MemeController extends AbstractController
     public function addMeme(Request $request): Response
     {
         $user = $this->getUser();
-        $requestBody = json_decode($request->getContent(), true) ?? [];
+        $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
         }
