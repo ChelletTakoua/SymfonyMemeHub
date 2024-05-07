@@ -28,4 +28,9 @@ class BannedUserController extends AbstractController
             'controller_name' => 'BannedUserController',
         ]);
     }
+
+    // TODO: when the user is banned, the user should not be able to login or access any routes
+    //              and his memes should become blocked till the ban duration is over
+    //             if the user is banned permanently, the ban duration should be set to null
+
 }

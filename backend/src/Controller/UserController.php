@@ -77,8 +77,13 @@ class UserController extends AbstractController
     //     return new Response('');
     // }
 
+    // #[Route('/user/profile/modifyPassword', name: 'modify_password')]
+    // public function modifyPassword(): Response
+    // {
+    //     // Your code here
+    // }
     #[Route('/user/{id}', name: 'get_user_profile')]
-    public function getUserProfile(?User $user=null): Response
+    public function getUserProfile(?User $user=null): JsonResponse
     {
         if (!$user) {
             throw new NotFoundHttpException("User not found");
@@ -87,11 +92,6 @@ class UserController extends AbstractController
         return $this->json(['user' => $user]);
     }
 
-    // #[Route('/user/profile/modifyPassword', name: 'modify_password')]
-    // public function modifyPassword(): Response
-    // {
-    //     // Your code here
-    // }
 
     #[Route('/user/profile/edit', name: 'edit_profile',  methods: ['POST'])]
     public function editProfile(Request $request): Response

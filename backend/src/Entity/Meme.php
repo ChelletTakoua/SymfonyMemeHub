@@ -254,7 +254,6 @@ class Meme implements JsonSerializable
 
     private function getNbLikes()
     {
-        //TOOD: to implement
-        return 2;
+        return count($this->getLikes());
     }
 }

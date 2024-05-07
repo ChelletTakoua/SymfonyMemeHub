@@ -33,7 +33,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
-
         $user->setPassword($newHashedPassword);
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
@@ -44,12 +43,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findByRoleASC($role) :array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.roles = :role')
-            ->setParameter('role', '["'.$role.'"]')
-            ->orderBy('u.username', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->orderBy('u.username', 'ASC');
+
+        return $qb->getQuery()->getResult();
     }
 
     /** gets all the users the ordered by username DESC
@@ -57,12 +56,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findByRoleDESC($role) :array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.roles = :role')
-            ->setParameter('role', '["'.$role.'"]')
-            ->orderBy('u.username', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $qb = $this->createQueryBuilder('u');
+        $qb->where('u.roles LIKE :roles')
+            ->setParameter('roles', '%"'.$role.'"%')
+            ->orderBy('u.username', 'DESC');
+
+        return $qb->getQuery()->getResult();
     }
 
     /**gets all the users that match the search term ordered by username ASC
@@ -126,10 +125,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findAllOrderedByRegisterDateASC(): array
     {
-        return $this->createQueryBuilder('user')
-            ->orderBy('user.registeredAt', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->findBy([], ['registrationDate' => 'ASC']);
     }
 
     /**gets all the users ordered by their registration DESC
@@ -137,10 +133,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findAllOrderedByRegisterDateDESC(): array
     {
-        return $this->createQueryBuilder('user')
-            ->orderBy('user.registeredAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $this->findBy([], ['registrationDate' => 'DESC']);
     }
 
 
@@ -149,12 +142,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findAllVerifiedASC(): array
     {
-        return $this->createQueryBuilder('user')
-            ->andWhere('user.isVerified = :verified')
-            ->setParameter('verified', true)
-            ->orderBy('user.username', 'ASC')
-            ->getQuery()
-            ->getResult();
+        return $this->findBy(['verified' => true], ['username' => 'ASC']);
     }
 
     /**gets all the users that are verified ordered by username DESC
@@ -162,12 +150,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      */
     public function findAllVerifiedDESC(): array
     {
-        return $this->createQueryBuilder('user')
-            ->andWhere('user.isVerified = :verified')
-            ->setParameter('verified', true)
-            ->orderBy('user.username', 'DESC')
-            ->getQuery()
-            ->getResult();
+        return $this->findBy(['verified' => true], ['username' => 'ASC']);
     }
 
 //    /**
