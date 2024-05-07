@@ -140,6 +140,12 @@ class MemeRepository extends ServiceEntityRepository
         return ceil($totalMemes / $pageSize);
     }
 
+    public function findMemesByUser(int $userId, bool $includeBlocked = true): array
+    {
+        return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
+    }
+
+
 //    /**
 //     * @return Meme[] Returns an array of Meme objects
 //     */
