@@ -113,9 +113,6 @@ class MemeController extends AbstractController
     public function getMemeNbLikes(Meme $meme): Response
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("User not logged in");
-        }
         $nbLikes = count($meme->getLikes());
         $isLiked = false;
         $likes = $user->getLikes();
