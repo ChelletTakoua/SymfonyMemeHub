@@ -28,8 +28,9 @@ export default function MemeEdit() {
       try {
         const res = await memeApi.getMemeById(id);
         if (res?.data.user_id !== user.id) navigate("/");
-        const memeData = { ...res?.data.meme };
+        const memeData = { ...res?.data };
         memeData.inputBoxes = res?.data.text_blocks;
+
         delete memeData.text_blocks;
         setCurrMeme(memeData);
       } catch (error) {

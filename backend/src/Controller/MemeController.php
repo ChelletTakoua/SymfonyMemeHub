@@ -34,9 +34,14 @@ class MemeController extends AbstractController
     #[Route('/memes', name: 'get_all_memes', methods: ['GET'])]
     public function getAllMemes(Request $request): Response
     {
+        $user = $this->getUser();
+        $liked = false;
+        
+
         $page = (int)($request->query->get('page') ?? 1);
         $pageSize = (int)($request->query->get('pageSize') ?? -1);
         $memes = $this->repo->findPaginated($page, $pageSize);
+
         $result = [
             'page' => $page,
             'pageSize' => $pageSize,
@@ -46,6 +51,7 @@ class MemeController extends AbstractController
         ];
         return $this->json($result);
     }
+
     #[Route('/memes/add', name: 'add_meme')]
     public function addMeme(Request $request): Response
     {
@@ -113,13 +119,19 @@ class MemeController extends AbstractController
         $nbLikes = count($meme->getLikes());
         $isLiked = false;
         $likes = $user->getLikes();
-        foreach ($likes as $like) {
-            if ($like->getMeme() === $meme) {
-                $isLiked = true;
-                break;
+
+        // add isLiked filed only if user is logged in
+        if($user){
+            foreach ($likes as $like) {
+                if ($like->getMeme() === $meme && $like->getUser() === $user){
+                    $isLiked = true;
+                    break;
+                }
             }
+            $response = ['nbLikes' => $nbLikes, 'liked' => $isLiked];
+        }else{
+            $response = ['nbLikes' => $nbLikes];
         }
-        $response = ['nbLikes' => $nbLikes, 'liked' => $isLiked];
         return $this->json($response);
     }
 

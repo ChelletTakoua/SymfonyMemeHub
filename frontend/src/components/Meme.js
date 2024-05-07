@@ -68,7 +68,6 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
       delete memeData.url;
       delete memeData.title;
       delete memeData.inputBoxes;
-      console.log(memeData);
       await memeApi.addMeme(memeData);
     }
     navigate(`/profile/${user.id}`);
