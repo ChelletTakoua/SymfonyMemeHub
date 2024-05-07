@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MemeRepository;
 use App\Traits\SoftDeleteTrait;
+use App\Annotation\PreSoftDelete;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -243,6 +244,11 @@ class Meme implements JsonSerializable
         // $this->resultImg = $defaultResultImg ;
     }
 
+    #[PreSoftDelete]
+    public function preSoftDelete(): void
+    {
+        dd("preSoftDelete");
+    }
 
     public function jsonSerialize(): mixed
     {

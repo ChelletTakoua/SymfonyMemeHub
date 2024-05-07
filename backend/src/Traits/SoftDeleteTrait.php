@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use App\Annotation\PreSoftDelete;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -9,7 +11,7 @@ trait SoftDeleteTrait
 {
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $deletedAt=null;
+    private ?\DateTimeInterface $deletedAt = null;
 
     public function getDeletedAt(): ?\DateTimeInterface
     {
@@ -22,10 +24,33 @@ trait SoftDeleteTrait
         return $this;
     }
 
-    public function softDelete($em)
+
+    public function softDelete($em): void
     {
+        $this->callPreSoftDelete();
         $this->deletedAt = new \DateTime();
         $em->persist($this);
         $em->flush();
     }
+
+    private function callPreSoftDelete(): void
+    {
+        $reflectionClass = new \ReflectionClass($this);
+        foreach ($reflectionClass->getMethods() as $method) {
+            if($this->hasAttribute($method, PreSoftDelete::class)){
+                $methodName = $method->getName();
+                $this->$methodName();
+            }
+        }
+    }
+
+    function hasAttribute(\ReflectionMethod $method, string $attributeName): bool {
+        foreach ($method->getAttributes() as $attribute) {
+            if ($attribute->getName() === $attributeName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
