@@ -69,6 +69,7 @@ class AdminController extends AbstractController
             return new JsonResponse(['user' => $user], Response::HTTP_OK);
         }
         throw new NotFoundHttpException("User not found");
+        
     }
 
     /** takes in a user id and changes the role of the user which is specified in the body of the request
