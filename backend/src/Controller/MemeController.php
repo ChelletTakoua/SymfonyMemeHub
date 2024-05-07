@@ -31,11 +31,11 @@ class MemeController extends AbstractController
         $this->repo = $this->doctrine->getRepository(Meme::class);
     }
 
-    #[Route('/memes', name: 'get_all_memes')]
+    #[Route('/memes', name: 'get_all_memes', methods: ['GET'])]
     public function getAllMemes(Request $request): Response
     {
-        $page = intval($request->query->get('page') ?? 1);
-        $pageSize = intval($request->query->get('pageSize') ?? -1);
+        $page = (int)($request->query->get('page') ?? 1);
+        $pageSize = (int)($request->query->get('pageSize') ?? -1);
         $memes = $this->repo->findPaginated($page, $pageSize);
         $result = [
             'page' => $page,
@@ -65,9 +65,10 @@ class MemeController extends AbstractController
         $meme = new Meme();
         $meme->setUser($user);
         $meme->setTemplate($template);
-        $meme->setResultImg($requestBody['result_img']);
-        $meme->setCreationDate(new \DateTime());
-        $meme->setNumLikes(0);
+
+        $resultImg = fopen('data://text/plain;base64,' . base64_encode($requestBody['result_img']), 'r');
+        $meme->setResultImg($resultImg);
+
         $em->persist($meme);
         foreach ($requestBody['text_blocks'] as $textBlock) {
             $tb = new TextBlock();
@@ -96,13 +97,9 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/user/{id}', name: 'get_user_memes')]
-    public function getUserMemes($id): Response
+    public function getUserMemes(?User $user=null): Response
     {
-        $user = $this->doctrine->getRepository(User::class)->find($id);
-        $memes = $this->repo->findBy(['user' => $user]);
-        usort($memes, function ($a, $b) {
-            return $b->getCreationDate() <=> $a->getCreationDate();
-        });
+        $memes=$this->repo->findMemesByUser($user->getId(),false);
         return $this->json($memes);
     }
 
@@ -128,8 +125,9 @@ class MemeController extends AbstractController
 
 
     #[Route('/memes/{id}/modify', name: 'modify_meme')]
-    public function modifyMeme(Request $request, $id, ?User $user): Response
+    public function modifyMeme(Request $request, $id): Response
     {
+        $user = $this->getUser();
         $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
@@ -191,8 +189,9 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}/dislike', name: 'dislike_meme')]
-    public function dislikeMeme($id, ?User $user): Response
+    public function dislikeMeme($id): Response
     {
+        $user = $this->getUser();
         if (!$user) {
             throw new NotFoundHttpException("User not logged in ");
         }
@@ -212,8 +211,9 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}/report', name: 'report_meme')]
-    public function reportMeme($id, Request $request, ?User $user): Response
+    public function reportMeme($id, Request $request): Response
     {
+        $user = $this->getUser();
         $requestBody = $request->toArray() ?? [];
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
@@ -241,8 +241,9 @@ class MemeController extends AbstractController
     }
 
     #[Route('/memes/{id}/delete', name: 'delete_meme')]
-    public function deleteMeme($id, ?User $user): Response
+    public function deleteMeme($id): Response
     {
+        $user = $this->getUser();
         if (!$user) {
             throw new NotFoundHttpException("User not logged in");
         }

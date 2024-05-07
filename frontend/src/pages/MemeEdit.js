@@ -27,9 +27,9 @@ export default function MemeEdit() {
     const fetchMeme = async (id) => {
       try {
         const res = await memeApi.getMemeById(id);
-        if (res?.data.meme.user_id !== user.id) navigate("/");
+        if (res?.data.user_id !== user.id) navigate("/");
         const memeData = { ...res?.data.meme };
-        memeData.inputBoxes = res?.data.meme.text_blocks;
+        memeData.inputBoxes = res?.data.text_blocks;
         delete memeData.text_blocks;
         setCurrMeme(memeData);
       } catch (error) {
