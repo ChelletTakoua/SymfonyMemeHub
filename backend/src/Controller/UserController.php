@@ -24,17 +24,17 @@ class UserController extends AbstractController
         $this->repo = $this->doctrine->getRepository(User::class);
     }
 
-    #[Route('/profile', name: 'profile')]
-    public function profile(): Response
-    {
-        $user = $this->getUser();
-        if(!$user){
-            return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
-        }
-        return $this->json(['user' => $user,
-                                    'memes' => $user->getMemes()],
-                                    Response::HTTP_OK);
-    }
+    // #[Route('/profile', name: 'profile')]
+    // public function profile(): Response
+    // {
+    //     $user = $this->getUser();
+    //     if(!$user){
+    //         return new JsonResponse(['message' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
+    //     }
+    //     return $this->json(['user' => $user,
+    //                                 'memes' => $user->getMemes()],
+    //                                 Response::HTTP_OK);
+    // }
 
 //      TODO: mailing Service
 //    #[Route('/forgotPassword/{username}', name: 'forgot_password')]
