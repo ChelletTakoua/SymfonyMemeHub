@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MemeRepository;
+use App\Traits\SoftDeleteTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -21,6 +22,8 @@ use JsonSerializable;
 //        $this->entityManager->flush();
 class Meme implements JsonSerializable
 {
+
+    use SoftDeleteTrait;
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -54,6 +57,8 @@ class Meme implements JsonSerializable
 
     #[ORM\OneToMany(mappedBy: 'meme', targetEntity: Report::class)]
     private Collection $reports;
+
+
 
     public function __construct()
     {
@@ -250,12 +255,14 @@ class Meme implements JsonSerializable
             // "liked" => "not implemented",
             "creation_date" => $this->getCreationDate(),
             "text_blocks" => $this->getTextBlocks(),
-            "result_img" => stream_get_contents($this->getResultImg())
+            "deletedAt" => $this->getDeletedAt(),//TODO: to remove
+            "result_img" => stream_get_contents($this->getResultImg()),
         ];
     }
 
     private function getNbLikes()
     {
         return count($this->getLikes());
+
     }
 }
