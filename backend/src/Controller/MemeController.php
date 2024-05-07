@@ -249,23 +249,20 @@ class MemeController extends AbstractController
         return $this->json(["report" => $report]);
     }
 
+
     #[Route('/memes/{id}/delete', name: 'delete_meme')]
-    public function deleteMeme($id): Response
+    public function deleteMeme(?Meme $meme): Response
     {
         $user = $this->getUser();
-        if (!$user) {
-            throw new NotFoundHttpException("User not logged in");
-        }
-        $meme = $this->repo->find($id);
         if (!$meme) {
             throw new NotFoundHttpException("Meme not found");
         }
         if ($meme->getUser() !== $user) {
             throw new AccessDeniedHttpException("No permission to delete this meme");
         }
-        $em = $this->doctrine->getManager();
-        $em->remove($meme);
-        $em->flush();
+
+        $meme->softDelete($this->doctrine->getManager());
+
         return $this->json([
             'status' => 'success',
             'code' => 200

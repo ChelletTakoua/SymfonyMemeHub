@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\BlockedMeme;
 use App\Entity\Meme;
+use App\Traits\SoftDeleteRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 //do not remove/overwride the find() method or it will break the code in the controller
@@ -15,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MemeRepository extends ServiceEntityRepository
 {
+    use SoftDeleteRepositoryTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meme::class);
@@ -67,7 +70,7 @@ class MemeRepository extends ServiceEntityRepository
 
 
     private function getMemeBaseQuery(bool $includeBlocked = true){
-        $queryBuilder = $this->createQueryBuilder('m');
+        $queryBuilder = $this->getbaseQueryBuilder('m');
 
         if (!$includeBlocked) {
             $queryBuilder->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
@@ -144,6 +147,8 @@ class MemeRepository extends ServiceEntityRepository
     {
         return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
     }
+
+
 
 
 //    /**
