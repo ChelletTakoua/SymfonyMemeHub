@@ -33,7 +33,6 @@ class AdminController extends AbstractController
     public function getAllUsers(): JsonResponse
     {
         $users = $this->repo->findByRoleDESC("ROLE_USER");
-
         if (!$users) {
             throw new NotFoundHttpException("No users found");
         }
@@ -63,20 +62,16 @@ class AdminController extends AbstractController
      * @throws NotFoundHttpException
      */
     #[Route('/user/{id}', name: 'user_profile')]
-    public function getUserProfile(?User $user): JsonResponse
+    public function getUserProfile($id): Response
     {
-        if ($user) {
-            return new JsonResponse(['user' => $user], Response::HTTP_OK);
-        }
-        throw new NotFoundHttpException("User not found");
-        
+        return $this->forward('App\Controller\UserController::getUserProfile',['id'=>$id]);
     }
 
     /** takes in a user id and changes the role of the user which is specified in the body of the request
      * @throws NotFoundHttpException
      * @throws BadRequestException
      */
-    #[Route('/admin/user/{id}/role', name: 'change_user_role', methods: ['POST'])]
+    #[Route('/user/{id}/role', name: 'change_user_role', methods: ['POST'])]
     public function changeUserRole(Request $request, $id): Response
     {
         $data = $request->toArray();
