@@ -27,19 +27,19 @@ trait SoftDeleteTrait
 
     public function softDelete($em): void
     {
-        $this->callPreSoftDelete();
+        $this->callPreSoftDelete($em);
         $this->deletedAt = new \DateTime();
         $em->persist($this);
         $em->flush();
     }
 
-    private function callPreSoftDelete(): void
+    private function callPreSoftDelete($em = null): void
     {
         $reflectionClass = new \ReflectionClass($this);
         foreach ($reflectionClass->getMethods() as $method) {
             if($this->hasAttribute($method, PreSoftDelete::class)){
                 $methodName = $method->getName();
-                $this->$methodName();
+                $this->$methodName($em);
             }
         }
     }

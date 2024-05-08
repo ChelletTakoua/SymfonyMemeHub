@@ -121,11 +121,14 @@ class UserController extends AbstractController
         throw new BadRequestHttpException("A parameter must be provided");
     }
 
-    #[Route('/user/profile', name: 'delete_profile', methods: ['DELETE'])]
+    #[Route('/deleteAccount', name: 'delete_profile', methods: ['DELETE'])]
     public function deleteProfile(): Response
     {
+        $user = $this->getUser();
+        $user->softDelete($this->doctrine->getManager());
         // Your code here
         // the user will be banned not removed from the db
         return new Response('');
     }
+    //TODO: check if user is deleted/banned when login
 }

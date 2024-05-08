@@ -342,9 +342,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         $this->profilePic = $default_pp;
     }
     #[PreSoftDelete]
-    public function preSoftDelete(): void
+    public function preSoftDelete($em): void
     {
-        dd('jijij');
+        foreach ($this->getMemes() as $meme){
+            $meme->softDelete($em);
+        }
     }
 
     public function jsonSerialize(): mixed
