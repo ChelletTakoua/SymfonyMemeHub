@@ -166,6 +166,11 @@
       <path value="$PROJECT_DIR$/backend/vendor/symfony/var-exporter" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/web-link" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/web-profiler-bundle" />
+      <path value="$PROJECT_DIR$/backend/vendor/psr/clock" />
+      <path value="$PROJECT_DIR$/backend/vendor/namshi/jose" />
+      <path value="$PROJECT_DIR$/backend/vendor/lcobucci/jwt" />
+      <path value="$PROJECT_DIR$/backend/vendor/lcobucci/clock" />
+      <path value="$PROJECT_DIR$/backend/vendor/lexik/jwt-authentication-bundle" />
     </include_path>
   </component>
   <component name="ProblemsViewState">
@@ -190,7 +195,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors.Color Scheme Font&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -244,7 +249,7 @@
       <workItem from="1715030918378" duration="11000" />
       <workItem from="1715030945242" duration="3724000" />
       <workItem from="1715096565546" duration="1786000" />
-      <workItem from="1715126538979" duration="6312000" />
+      <workItem from="1715126538979" duration="24381000" />
     </task>
     <task id="LOCAL-00001" summary="ignore .idea files">
       <option name="closed" value="true" />

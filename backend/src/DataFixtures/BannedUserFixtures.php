@@ -20,6 +20,7 @@ class BannedUserFixtures extends Fixture implements FixtureGroupInterface
         $userRepo = $manager->getRepository(User::class);
         $users = $userRepo->findBy([], [], 5);
         foreach ($users as $user) {
+
             if ($user->getUsername() === 'admin') continue;
             $bannedUser = new BannedUser();
             $bannedUser->setUser($user);

@@ -154,9 +154,9 @@ class MemeRepository extends ServiceEntityRepository
         return ceil($totalMemes / $pageSize);
     }
 
-    public function findMemesByUser(int $userId, bool $includeBlocked = true): array
+    public function findMemesByUser(int $userId): array
     {
-        return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
+        return $this->findBy(['user' => $userId], ['creationDate' => 'DESC']);
     }
     public function findByASC(){
         return $this->createQueryBuilder('m')
@@ -181,7 +181,6 @@ class MemeRepository extends ServiceEntityRepository
             ->getResult()
         ; 
     }
-
 
 
 //    /**
