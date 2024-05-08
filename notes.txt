@@ -44,3 +44,8 @@ rq: in front
         - 1 month
         - 3months
         - permanently
+
+
+TO_DOs:
+    - add deleteProfile button to front(in profile page)
+    - add ban button to dashboard admin
