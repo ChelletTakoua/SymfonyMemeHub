@@ -47,7 +47,7 @@ class MemeController extends AbstractController
             'page' => $page,
             'pageSize' => $pageSize,
             'total' => count($memes),
-            'totalPages' => $this->repo->getTotalPages($pageSize),
+            'totalPages' => $this->repo->getTotalPages($pageSize, false),
             'memes' => $memes,
         ];
         return $this->json($result);

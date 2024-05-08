@@ -249,6 +249,7 @@ class Meme implements JsonSerializable
     #[PreSoftDelete]
     public function preSoftDelete(): void
     {
+
     }
 
     public function jsonSerialize(): mixed
