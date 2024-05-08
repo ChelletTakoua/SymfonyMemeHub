@@ -8,9 +8,11 @@ use App\Traits\SoftDeleteTrait;
 use App\Annotation\PreSoftDelete;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\LifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterfaceCallbacks;
 
 #[
     ORM\Entity(repositoryClass: UserRepository::class),
@@ -25,6 +27,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
 
     use SoftDeleteTrait;
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -34,12 +37,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Assert\NotBlank]
     private ?string $password = null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $verified = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
