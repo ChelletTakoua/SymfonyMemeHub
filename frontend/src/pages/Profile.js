@@ -5,7 +5,7 @@ import ProfileCard from "../components/ProfileCard";
 import { AppContext } from "../context/AppContext";
 import { memeApi, userApi } from "../services/api";
 import { Link } from "react-router-dom";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaPlusCircle, FaTrash } from "react-icons/fa";
 
 const Profile = () => {
   const { user, setUser, toast } = useContext(AppContext);
@@ -120,6 +120,18 @@ const Profile = () => {
     }
   };
 
+  const handleDeleteAccount = () => {
+    try {
+      userApi.deleteUserProfile();
+      toast.success("Account deleted successfully.");
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast.error("Error deleting account.");
+    }
+  };
+
   return (
     <div className="grow bg-palenight">
       <main className="container mx-auto py-8">
@@ -169,13 +181,23 @@ const Profile = () => {
               <p className="text-gray-300">Email: {email}</p>
             )}
             {isOwner && (
-              <button
-                onClick={handleSave}
-                type="submit"
-                className="px-4 py-2 mt-6 text-white bg-blue-800 rounded shadow-lg active:text-gray-500"
-              >
-                Save Changes
-              </button>
+              <>
+                <button
+                  onClick={handleSave}
+                  type="submit"
+                  className="px-4 py-2 mt-6 text-white bg-blue-800 rounded shadow-lg active:text-gray-500"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  type="submit"
+                  className="px-4 py-2 mt-6 text-white bg-red-800 rounded shadow-lg active:text-gray-500 mt-20"
+                >
+                  <FaTrash className="inline-block" />
+                  <span className="p-4"> Delete Account</span>
+                </button>
+              </>
             )}
           </div>
           <div className="w-3/4 flex justify-center">
