@@ -11,8 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\LifecycleCallbacks;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterfaceCallbacks;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[
     ORM\Entity(repositoryClass: UserRepository::class),
