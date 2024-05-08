@@ -61,12 +61,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?BannedUser $bannedUser = null;
 
+    #[ORM\OneToMany(mappedBy: 'admin', targetEntity: BannedUser::class)]
+    private Collection $bannedUsers;
+
     public function __construct()
     {
         $this->memes = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->reports = new ArrayCollection();
         $this->blockedMemes = new ArrayCollection();
+        $this->bannedUsers = new ArrayCollection();
     }
 
 
@@ -348,5 +352,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         ];
         //TODO: changed reg_dat to registrationDate, is_verified to isVerified, profile_pic to profilePic
         // @yessine sallemi
+    }
+
+    /**
+     * @return Collection<int, BannedUser>
+     */
+    public function getBannedUsers(): Collection
+    {
+        return $this->bannedUsers;
+    }
+
+    public function addBannedUser(BannedUser $bannedUser): static
+    {
+        if (!$this->bannedUsers->contains($bannedUser)) {
+            $this->bannedUsers->add($bannedUser);
+            $bannedUser->setAdmin($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBannedUser(BannedUser $bannedUser): static
+    {
+        if ($this->bannedUsers->removeElement($bannedUser)) {
+            // set the owning side to null (unless already changed)
+            if ($bannedUser->getAdmin() === $this) {
+                $bannedUser->setAdmin(null);
+            }
+        }
+
+        return $this;
     }
 }

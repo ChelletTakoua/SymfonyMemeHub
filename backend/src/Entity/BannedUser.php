@@ -30,6 +30,10 @@ class BannedUser
     #[ORM\Column(length: 255)]
     private ?string $reason = null;
 
+    #[ORM\ManyToOne(inversedBy: 'bannedUsers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $admin = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,5 +91,17 @@ class BannedUser
     public function onPersist(): void
     {
         $this->banDate = new \DateTime();
+    }
+
+    public function getAdmin(): ?User
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(?User $admin): static
+    {
+        $this->admin = $admin;
+
+        return $this;
     }
 }
