@@ -1,8 +1,16 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  forwardRef,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { AppContext } from "../context/AppContext";
 import { adminApi, memeApi } from "../services/api";
 import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AdminDashboard = () => {
   const [selectedButton, setSelectedButton] = useState("Pending");
@@ -13,6 +21,16 @@ const AdminDashboard = () => {
   const [viewedImg, setViewedImg] = useState("");
   const [openView, setOpenView] = useState(false);
   const [backendDevMode, setBackendDevMode] = useState(false);
+  const [ban, setBan] = useState([]);
+  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    <button
+      className="bg-blue-200 py-1 px-2 rounded"
+      onClick={onClick}
+      ref={ref}
+    >
+      {value}
+    </button>
+  ));
 
   const { toast, user } = useContext(AppContext);
 
@@ -119,6 +137,16 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleBan = async (userId) => {
+    try {
+      await adminApi.banUser(ban.find((el) => el.userId === userId));
+      toast.success("User banned successfully");
+      await fetchUsersAndStats();
+    } catch (error) {
+      toast.error("Failed to ban user");
+    }
+  };
+
   return (
     <div className="p-4 relative">
       <main className="container mx-auto flex-grow p-4">
@@ -156,7 +184,8 @@ const AdminDashboard = () => {
                     <th className="px-4 py-3">User ID</th>
                     <th className="px-4 py-3">Username</th>
                     <th className="px-4 py-3">Role</th>
-                    <th className="px-4 py-3">Actions</th>
+                    <th className="px-4 py-3">Change role</th>
+                    <th className="px-4 py-3">Ban</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y">
@@ -164,17 +193,66 @@ const AdminDashboard = () => {
                     <tr className="text-gray-700" key={user.id}>
                       <td className="px-4 py-3">{user.id}</td>
                       <td className="px-4 py-3">{user.username}</td>
-                      <td className="px-4 py-3">{user.role}</td>
+                      <td className="px-4 py-3">
+                        {user.roles.includes("ROLE_ADMIN") ? "admin" : "user"}
+                      </td>
                       <td className="px-4 py-3">
                         <button
                           className="text-blue-600 hover:text-blue-900 mr-2"
                           onClick={() => {
-                            const newRole =
-                              user.role === "user" ? "admin" : "user";
+                            const newRole = user.roles.includes("ROLE_ADMIN")
+                              ? "ROLE_USER"
+                              : "ROLE_ADMIN";
                             handleChangeRole(user.id, newRole);
                           }}
                         >
                           Change Role
+                        </button>
+                      </td>
+                      <td className="flex gap-4 mt-2">
+                        <DatePicker
+                          selected={
+                            ban.find((ban) => ban.userId === user.id)?.date ||
+                            new Date()
+                          }
+                          onChange={(date) => {
+                            const reason = ban.find(
+                              (el) => el.userId === user.id
+                            )?.reason;
+                            if (!ban.some((ban) => ban.userId === user.id)) {
+                              setBan((prev) => [
+                                ...prev,
+                                { userId: user.id, date, reason },
+                              ]);
+                            }
+                          }}
+                          customInput={<ExampleCustomInput />}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Reason"
+                          className="border border-gray-300 rounded px-2 py-1"
+                          value={
+                            ban.find((ban) => ban.userId === user.id)?.reason
+                          }
+                          onChange={(e) => {
+                            if (!ban.some((ban) => ban.userId === user.id)) {
+                              setBan((prev) => [
+                                ...prev,
+                                {
+                                  userId: user.id,
+                                  date: new Date(),
+                                  reason: e.target.value,
+                                },
+                              ]);
+                            }
+                          }}
+                        />
+                        <button
+                          className="text-red-600 hover:text-red-900"
+                          onClick={() => handleBan(user.id)}
+                        >
+                          Ban
                         </button>
                       </td>
                     </tr>

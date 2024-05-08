@@ -94,6 +94,11 @@ export const adminApi = {
     }),
   deleteUser: (userId) =>
     base.delete(ADMIN_API_ROUTES["DELETE_USER"].replace(":id", userId)),
+  banUser: (userId, reason, date) =>
+    base.post(ADMIN_API_ROUTES["BAN_USER"].replace(":id", userId), {
+      reason,
+      date,
+    }),
   getAllReports: () => base.get(ADMIN_API_ROUTES["GET_ALL_REPORTS"]),
   resolveReport: (reportId) =>
     base.post(ADMIN_API_ROUTES["RESOLVE_REPORT"].replace(":id", reportId)),

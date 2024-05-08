@@ -49,3 +49,4 @@ rq: in front
 TO_DOs:
     - add deleteProfile button to front(in profile page)
     - add ban button to dashboard admin
+    - unique and asserts 
