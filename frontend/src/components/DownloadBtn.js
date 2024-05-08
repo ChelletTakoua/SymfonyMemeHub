@@ -1,23 +1,36 @@
 import * as htmlToImage from "html-to-image";
+import Spinner from "./Spinner";
 
-export default function DownloadBtn() {
-  function download() {
-    htmlToImage
-      .toPng(document.querySelector("#meme"), { quality: 1 })
-      .then(function (dataUrl) {
-        var link = document.createElement("a");
-        link.download = "meme.jpeg";
-        link.href = dataUrl;
-        link.click();
+export default function DownloadBtn({ isLoading, setIsLoading }) {
+  async function download() {
+    try {
+      setIsLoading(true);
+      const dataUrl = await htmlToImage.toPng(document.querySelector("#meme"), {
+        quality: 1,
       });
+      var link = document.createElement("a");
+      link.download = "meme.jpeg";
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      console.error("Error downloading meme:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }
-
   return (
     <button
       onClick={download}
-      className="active:scale-95 hover:scale-105 focus:scale-105 transition-transform p-8 text-4xl lg:text-xl lg:py-4 lg:px-6 text-white bg-gradient-to-r from-algae to-grass shadow-2xl rounded-2xl lg:rounded-lg"
+      disabled={isLoading}
+      className={`w-52 flex justify-center 
+      ${!isLoading && "active:scale-95 hover:scale-105 focus:scale-105"}
+      transition-transform text-xl py-4 px-6 text-white bg-gradient-to-r from-algae to-grass shadow-2xl rounded-2xl`}
     >
-      Download Meme
+      {!isLoading ? (
+        "Download Meme"
+      ) : (
+        <Spinner width={40} height={28} color="#97da7d" />
+      )}
     </button>
   );
 }
