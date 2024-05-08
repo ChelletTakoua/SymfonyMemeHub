@@ -46,7 +46,12 @@ export const userApi = {
 };
 
 export const memeApi = {
-  getAllMemes: () => base.get(MEME_API_ROUTES["GET_ALL_MEMES"]),
+  // queryparams
+
+  getAllMemes: (page = 1, pageSize = 10, order = "asc") =>
+    base.get(MEME_API_ROUTES["GET_ALL_MEMES"], {
+      params: { page, pageSize, order },
+    }),
   getMemeById: (memeId) =>
     base.get(MEME_API_ROUTES["GET_MEME_BY_ID"].replace(":id", memeId)),
   getUserMemes: (userId) =>
@@ -84,7 +89,7 @@ export const adminApi = {
   getUserProfile: (userId) =>
     base.get(ADMIN_API_ROUTES["GET_USER_PROFILE"].replace(":id", userId)),
   changeUserRole: (userId, role) =>
-    base.put(ADMIN_API_ROUTES["CHANGE_USER_ROLE"].replace(":id", userId), {
+    base.post(ADMIN_API_ROUTES["CHANGE_USER_ROLE"].replace(":id", userId), {
       role,
     }),
   deleteUser: (userId) =>
