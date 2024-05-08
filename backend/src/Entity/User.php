@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Annotation\PreSoftDelete;
 use App\Repository\UserRepository;
+use App\Traits\SoftDeleteTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -22,6 +24,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
     #[ORM\Column]
     private ?int $id = null;
 
+    use SoftDeleteTrait;
     #[ORM\Column(length: 180, unique: true)]
     private ?string $username = null;
 
@@ -337,6 +340,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
         $this->roles []= 'ROLE_USER';
         $this->verified = 0;
         $this->profilePic = $default_pp;
+    }
+    #[PreSoftDelete]
+    public function preSoftDelete(): void
+    {
+        dd('jijij');
     }
 
     public function jsonSerialize(): mixed
