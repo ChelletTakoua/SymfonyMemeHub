@@ -158,7 +158,29 @@ class MemeRepository extends ServiceEntityRepository
     {
         return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
     }
+    public function findByASC(){
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.creationDate', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findbyDESC(){
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.creationDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
+    public function findBydate($date){
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.creationDate = :val')
+            ->setParameter('val', $date)
+            ->getQuery()
+            ->getResult()
+        ; 
+    }
 
 
 
