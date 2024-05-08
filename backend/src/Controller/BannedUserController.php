@@ -25,10 +25,13 @@ class BannedUserController extends AbstractController
     }
 
     #[Route('/admin/ban/{id}', name: 'ban_user')]
-    public function banUser(?User $user = null, Request $request): Response
+    public function banUser(Request $request, ?User $user = null): Response
     {
         if (!$user) {
             throw new NotFoundHttpException('User not found');
+        }
+        if ($user->isBanned()) {
+            throw new BadRequestHttpException('User is already banned');
         }
 
         $admin = $this->getUser();
@@ -43,13 +46,17 @@ class BannedUserController extends AbstractController
         if (!isset($requestBody['banEndDate'])) {
             throw new BadRequestHttpException("BanEndDate can't be empty");
         }
-
+        $banEndDate = new \DateTime($requestBody['banEndDate']);
+        if ($banEndDate < new \DateTime()) {
+            throw new BadRequestHttpException("BanEndDate can't be in the past");
+        }
         $bannedUser = new BannedUser();
         $bannedUser->setUser($user);
+
         $bannedUser->setAdmin($admin);
 
         $reason = $requestBody['reason'];
-        $banEndDate = new \DateTime($requestBody['banEndDate']);
+
 
         $banDuration = null;
         if ($banEndDate) {
@@ -57,10 +64,12 @@ class BannedUserController extends AbstractController
             $banDuration = $banEndDate->diff($now)->days;
         }
         $bannedUser->setBanDuration($banDuration);
+        $bannedUser->setBanEndDate($banEndDate);
         $bannedUser->setReason($reason);
 
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($bannedUser);
+        $user->setBanned(true);
         $entityManager->flush();
 
         return $this->json([
@@ -68,7 +77,4 @@ class BannedUserController extends AbstractController
             'code' => 200
         ]);
     }
-
-    // TODO: when the user is banned, the user should not be able to login or access any routes
-
 }
