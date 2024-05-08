@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\BlockedMeme;
+use App\Entity\Like;
 use App\Entity\Meme;
+use App\Entity\User;
 use App\Traits\SoftDeleteRepositoryTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -21,8 +23,17 @@ class MemeRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meme::class);
+
     }
 
+    public function isLikedByUser(Meme $meme, User $user): bool
+    {
+        $likes = $this->getEntityManager()
+            ->getRepository(Like::class)
+            ->findBy(['meme' => $meme, 'user' => $user]);
+
+        return !empty($likes);
+    }
 
     /*public function findRandomMeme(): ?Meme
     {

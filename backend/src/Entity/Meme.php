@@ -58,8 +58,12 @@ class Meme implements JsonSerializable
 
     #[ORM\OneToMany(mappedBy: 'meme', targetEntity: Report::class)]
     private Collection $reports;
+    private ?User $currentUser=null;
 
-
+    public function setCurrentUser(?User $user): void
+    {
+        $this->currentUser = $user;
+    }
 
     public function __construct()
     {
@@ -252,19 +256,29 @@ class Meme implements JsonSerializable
 
     public function jsonSerialize(): mixed
     {
+        $isLikedByUser = false;
+        if ($this->currentUser) {
+            foreach ($this->currentUser->getLikes() as $like) {
+                if ($like->getMeme() === $this) {
+                    $isLikedByUser = true;
+                    break;
+                }
+            }
+        }
         
         return [
             "id" => $this->getId(),
             "template" => $this->getTemplate(),
             "user_id" =>  $this->getUser()->getId(), //TODO: does this trigger a fetch from the database
             "nb_likes" => $this->getNbLikes(),
-            // "liked" => "not implemented",
             "creation_date" => $this->getCreationDate(),
             "text_blocks" => $this->getTextBlocks(),
             "deletedAt" => $this->getDeletedAt(),//TODO: to remove
             "result_img" => stream_get_contents($this->getResultImg()),
+            'liked' => $isLikedByUser,
         ];
     }
+
 
     private function getNbLikes()
     {

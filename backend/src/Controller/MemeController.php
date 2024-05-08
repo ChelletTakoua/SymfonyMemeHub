@@ -35,12 +35,12 @@ class MemeController extends AbstractController
     public function getAllMemes(Request $request): Response
     {
         $user = $this->getUser();
-        $liked = false;
-        
-
         $page = (int)($request->query->get('page') ?? 1);
         $pageSize = (int)($request->query->get('pageSize') ?? -1);
         $memes = $this->repo->findPaginated($page, $pageSize);
+        foreach ($memes as $meme) {
+            $meme->setCurrentUser($user);
+        }
 
         $result = [
             'page' => $page,
@@ -95,11 +95,12 @@ class MemeController extends AbstractController
     #[Route('/memes/{id}', name: 'get_meme_byId')]
     public function getMemeById(?Meme $meme=null): Response
     {
+
         if (!$meme) {
             throw new NotFoundHttpException("Meme not found");
         }
         //$meme = $this->repo->findPaginated($id,5);
-        return $this->json($meme);
+        return $this->json($meme->jsonSerialize($this->getUser()));
     }
 
     #[Route('/memes/user/{id}', name: 'get_user_memes')]
