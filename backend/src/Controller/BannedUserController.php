@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\BannedUser;
 use App\Entity\Meme;
+use App\Entity\BannedUser;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BannedUserController extends AbstractController
 {
@@ -30,7 +30,6 @@ class BannedUserController extends AbstractController
     }
 
     // TODO: when the user is banned, the user should not be able to login or access any routes
-    //              and his memes should become blocked till the ban duration is over
     //             if the user is banned permanently, the ban duration should be set to null
 
 }

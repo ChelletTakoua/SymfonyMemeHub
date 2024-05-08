@@ -34,3 +34,13 @@ TODO :
 - repositories
 - authentication 
 - 
+
+
+
+
+rq: in front
+    ban user for :
+        - 2 weeks
+        - 1 month
+        - 3months
+        - permanently
