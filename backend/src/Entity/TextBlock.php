@@ -102,7 +102,7 @@ class TextBlock implements \JsonSerializable
             'text' => $this->text,
             'x' => $this->x,
             'y' => $this->y,
-            'fontSize' => $this->fontSize,
+            'font_size' => $this->fontSize,
             //'meme' => $this->meme,
         ];
     }
