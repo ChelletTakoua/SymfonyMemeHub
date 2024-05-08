@@ -1,4 +1,5 @@
 lexik_jwt_authentication:
-  secret_key: "%env(resolve:JWT_SECRET_KEY)%"
-  public_key: "%env(resolve:JWT_PUBLIC_KEY)%"
-  pass_phrase: "%env(JWT_PASSPHRASE)%"
+  private_key_path: %kernel.root_dir%/../var/jwt/private.pem
+  public_key_path: %kernel.root_dir%/../var/jwt/public.pem
+  pass_phrase: %jwt_key_pass_phrase%
+  token_ttl: 3600
