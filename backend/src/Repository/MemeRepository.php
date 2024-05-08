@@ -158,6 +158,7 @@ class MemeRepository extends ServiceEntityRepository
     {
         return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
     }
+
     public function findByASC(){
         return $this->createQueryBuilder('m')
             ->orderBy('m.creationDate', 'ASC')
@@ -182,6 +183,14 @@ class MemeRepository extends ServiceEntityRepository
         ; 
     }
 
+    public function findByBlocked($blocked){
+        $val=$blocked?"not null":"null";
+        return $this->getbaseQueryBuilder('m')
+            ->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
+            ->where('bm.meme IS '.$val)
+            ->getQuery()
+            ->getResult();
+    }
 
 
 //    /**
