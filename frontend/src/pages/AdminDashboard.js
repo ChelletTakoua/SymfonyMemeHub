@@ -11,6 +11,7 @@ import { Modal } from "react-responsive-modal";
 import "react-responsive-modal/styles.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from "date-fns";
 
 const AdminDashboard = () => {
   const [selectedButton, setSelectedButton] = useState("Pending");
@@ -21,7 +22,8 @@ const AdminDashboard = () => {
   const [viewedImg, setViewedImg] = useState("");
   const [openView, setOpenView] = useState(false);
   const [backendDevMode, setBackendDevMode] = useState(false);
-  const [ban, setBan] = useState([]);
+  const [dates, setDates] = useState({});
+  const [reasons, setReasons] = useState({});
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <button
       className="bg-blue-200 py-1 px-2 rounded"
@@ -57,7 +59,21 @@ const AdminDashboard = () => {
       setAdmins(res?.data.users.filter((user) => user.role === "admin"));
       // Update the users list
       setUsers(res?.data.users.filter((el) => el.id !== user.id));
-
+      // set date for each user to today
+      const today = addDays(new Date(), 1);
+      setDates(
+        res?.data.users.reduce((acc, user) => {
+          acc[user.id] = today;
+          return acc;
+        }, {})
+      );
+      // set reasons for each user to empty string
+      setReasons(
+        res?.data.users.reduce((acc, user) => {
+          acc[user.id] = "";
+          return acc;
+        }, {})
+      );
       // Fetch the total memes
       const resMemes = await memeApi.getAllMemes();
       setStats((prev) => {
@@ -85,7 +101,7 @@ const AdminDashboard = () => {
 
     fetchReports();
     fetchUsersAndStats();
-    fetchDevModeStatus();
+    //fetchDevModeStatus();
   }, [toast, fetchReports, fetchUsersAndStats]);
 
   const handleIgnore = async (reportId) => {
@@ -139,7 +155,12 @@ const AdminDashboard = () => {
 
   const handleBan = async (userId) => {
     try {
-      await adminApi.banUser(ban.find((el) => el.userId === userId));
+      console.log(userId, dates[userId], reasons[userId]);
+      if (reasons[userId] === "") {
+        toast.error("Please provide a reason for banning the user");
+        return;
+      }
+      //await adminApi.banUser(userId, reasons[userId], dates[userId]);
       toast.success("User banned successfully");
       await fetchUsersAndStats();
     } catch (error) {
@@ -211,20 +232,17 @@ const AdminDashboard = () => {
                       </td>
                       <td className="flex gap-4 mt-2">
                         <DatePicker
-                          selected={
-                            ban.find((ban) => ban.userId === user.id)?.date ||
-                            new Date()
-                          }
+                          minDate={addDays(new Date(), 1)}
+                          placeholderText="Select a date other than today or yesterday"
+                          dateFormat={"dd/MM/yyyy"}
+                          selected={dates[user.id]}
                           onChange={(date) => {
-                            const reason = ban.find(
-                              (el) => el.userId === user.id
-                            )?.reason;
-                            if (!ban.some((ban) => ban.userId === user.id)) {
-                              setBan((prev) => [
+                            setDates((prev) => {
+                              return {
                                 ...prev,
-                                { userId: user.id, date, reason },
-                              ]);
-                            }
+                                [user.id]: date,
+                              };
+                            });
                           }}
                           customInput={<ExampleCustomInput />}
                         />
@@ -232,20 +250,14 @@ const AdminDashboard = () => {
                           type="text"
                           placeholder="Reason"
                           className="border border-gray-300 rounded px-2 py-1"
-                          value={
-                            ban.find((ban) => ban.userId === user.id)?.reason
-                          }
+                          value={reasons[user.id] ? reasons[user.id] : ""}
                           onChange={(e) => {
-                            if (!ban.some((ban) => ban.userId === user.id)) {
-                              setBan((prev) => [
+                            setReasons((prev) => {
+                              return {
                                 ...prev,
-                                {
-                                  userId: user.id,
-                                  date: new Date(),
-                                  reason: e.target.value,
-                                },
-                              ]);
-                            }
+                                [user.id]: e.target.value,
+                              };
+                            });
                           }}
                         />
                         <button

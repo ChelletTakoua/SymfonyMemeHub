@@ -8,7 +8,6 @@ import { FaArrowLeft } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import { memeApi } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
-import Spinner from "./Spinner";
 
 // currMeme and setBrowse are for creating a new meme
 export default function Meme({ currMeme = null, setBrowse = null }) {
