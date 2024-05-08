@@ -87,7 +87,6 @@ class ReportController extends AbstractController
         ]);
     }
 
-   
 }
 
 

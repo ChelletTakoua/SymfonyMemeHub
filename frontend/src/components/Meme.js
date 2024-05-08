@@ -8,6 +8,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { AppContext } from "../context/AppContext";
 import { memeApi } from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "./Spinner";
 
 // currMeme and setBrowse are for creating a new meme
 export default function Meme({ currMeme = null, setBrowse = null }) {
@@ -16,6 +17,8 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
   const { id } = useParams("id");
 
   const [inputBoxes, setInputBoxes] = useState([]);
+  const [isLoadingSave, setIsLoadingSave] = useState(false);
+  const [isLoadingDownload, setIsLoadingDownload] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -48,6 +51,7 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
   }
 
   async function handleSave() {
+    setIsLoadingSave(true);
     const res = await htmlToImage.toPng(document.querySelector("#meme"), {
       quality: 1,
     });
@@ -58,6 +62,7 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
         text_blocks: inputBoxes,
         result_img,
       };
+      console.log(memeDataUpdate);
       await memeApi?.modifyMeme(+id, memeDataUpdate);
     } else {
       const memeData = {
@@ -70,6 +75,7 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
       delete memeData.inputBoxes;
       await memeApi.addMeme(memeData);
     }
+    setIsLoadingSave(false);
     navigate(`/profile/${user.id}`);
   }
 
@@ -111,8 +117,11 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
             </button>
           </form>
           <div className="flex gap-6 w-full">
-            <DownloadBtn />
-            <SaveBtn onClick={handleSave} />
+            <DownloadBtn
+              isLoading={isLoadingDownload}
+              setIsLoading={setIsLoadingDownload}
+            />
+            <SaveBtn onClick={handleSave} isLoading={isLoadingSave} />
           </div>
           <p className="text-white">
             Hint: You can drag and move around the text!
