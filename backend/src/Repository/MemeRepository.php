@@ -20,6 +20,8 @@ class MemeRepository extends ServiceEntityRepository
 {
     use SoftDeleteRepositoryTrait;
 
+    
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Meme::class);
@@ -82,6 +84,7 @@ class MemeRepository extends ServiceEntityRepository
 
     private function getMemeBaseQuery(bool $includeBlocked = true){
         $queryBuilder = $this->getbaseQueryBuilder('m');
+
 
         if (!$includeBlocked) {
             $queryBuilder->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
@@ -158,6 +161,7 @@ class MemeRepository extends ServiceEntityRepository
     {
         return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
     }
+
 
 
 

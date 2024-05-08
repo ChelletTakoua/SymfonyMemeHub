@@ -18,12 +18,12 @@ const MEME_API_ROUTES = {
   GET_MEME_BY_ID: "/memes/:id",
   GET_USER_MEMES: "/memes/user/:id",
   GET_MEME_LIKES: "/memes/:id/likes",
-  ADD_MEME: "/memes",
+  ADD_MEME: "/memes/add",
   MODIFY_MEME: "/memes/:id/modify",
   LIKE_MEME: "/memes/:id/like",
   DISLIKE_MEME: "/memes/:id/dislike",
   REPORT_MEME: "/memes/:id/report",
-  DELETE_MEME: "/memes/:id",
+  DELETE_MEME: "/memes/:id/delete",
 };
 
 const TEMPLATE_API_ROUTES = {

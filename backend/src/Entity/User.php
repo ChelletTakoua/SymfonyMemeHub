@@ -343,7 +343,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
             'email' => $this->email,
             'registrationDate' => $this->registrationDate->format('Y-m-d H:i:s'),
             'verified' => $this->verified,
-            'profilePic' => stream_get_contents($this->profilePic)
+            'profilePic' => stream_get_contents($this->profilePic),
+            'roles' => $this->roles
         ];
         //TODO: changed reg_dat to registrationDate, is_verified to isVerified, profile_pic to profilePic
         // @yessine sallemi

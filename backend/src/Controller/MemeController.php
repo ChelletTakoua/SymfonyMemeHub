@@ -35,6 +35,7 @@ class MemeController extends AbstractController
     public function getAllMemes(Request $request): Response
     {
         $user = $this->getUser();
+<<<<<<< HEAD
         $page = (int)($request->query->get('page') ?? 1);
         $pageSize = (int)($request->query->get('pageSize') ?? -1);
         $memes = $this->repo->findPaginated($page, $pageSize);
@@ -45,6 +46,14 @@ class MemeController extends AbstractController
             }
             $meme['liked'] = $isLikedByCurrentUser;
         }
+=======
+        $liked = false;
+        
+
+        $page = (int)($request->query->get('page') ?? 1);
+        $pageSize = (int)($request->query->get('pageSize') ?? -1);
+        $memes = $this->repo->findPaginated($page, $pageSize);
+>>>>>>> fa389e046d4776201873fdca0e99831e4eb57aa0
 
         $result = [
             'page' => $page,

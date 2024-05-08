@@ -65,6 +65,8 @@ class Meme implements JsonSerializable
         $this->currentUser = $user;
     }
 
+
+
     public function __construct()
     {
         $this->textBlocks = new ArrayCollection();
@@ -256,6 +258,7 @@ class Meme implements JsonSerializable
 
     public function jsonSerialize(): mixed
     {
+<<<<<<< HEAD
         $isLikedByUser = false;
         if ($this->currentUser) {
             foreach ($this->currentUser->getLikes() as $like) {
@@ -265,17 +268,26 @@ class Meme implements JsonSerializable
                 }
             }
         }
+=======
+>>>>>>> fa389e046d4776201873fdca0e99831e4eb57aa0
         
         return [
             "id" => $this->getId(),
             "template" => $this->getTemplate(),
             "user_id" =>  $this->getUser()->getId(), //TODO: does this trigger a fetch from the database
             "nb_likes" => $this->getNbLikes(),
+<<<<<<< HEAD
+=======
+            // "liked" => "not implemented",
+>>>>>>> fa389e046d4776201873fdca0e99831e4eb57aa0
             "creation_date" => $this->getCreationDate(),
             "text_blocks" => $this->getTextBlocks(),
             "deletedAt" => $this->getDeletedAt(),//TODO: to remove
             "result_img" => stream_get_contents($this->getResultImg()),
+<<<<<<< HEAD
             'liked' => $isLikedByUser,
+=======
+>>>>>>> fa389e046d4776201873fdca0e99831e4eb57aa0
         ];
     }
 

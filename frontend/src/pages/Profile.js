@@ -41,7 +41,7 @@ const Profile = () => {
     const fetchMemes = async (id) => {
       try {
         const res = await memeApi.getUserMemes(id);
-        setMemes(res?.data.memes);
+        setMemes(res?.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
