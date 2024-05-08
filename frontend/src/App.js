@@ -70,7 +70,7 @@ function App() {
             </>
           )}
           <Route path="/profile/:id" element={<Profile />} />
-          {user?.role === "admin" && (
+          {user?.roles.includes("ROLE_ADMIN") && (
             <Route path="/admin" element={<AdminDashboard />} />
           )}
           <Route path="*" element={<NotFound />} />

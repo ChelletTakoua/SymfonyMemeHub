@@ -140,7 +140,6 @@ class MemeController extends AbstractController
     {
         $user = $this->getUser();
         $requestBody = $request->toArray() ?? [];
-        dd($requestBody);
         if (!$user) {
             throw new NotFoundHttpException('User not logged in');
         }
