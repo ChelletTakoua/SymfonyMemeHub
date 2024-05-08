@@ -62,6 +62,7 @@ export default function Meme({ currMeme = null, setBrowse = null }) {
         text_blocks: inputBoxes,
         result_img,
       };
+      console.log(memeDataUpdate);
       await memeApi?.modifyMeme(+id, memeDataUpdate);
     } else {
       const memeData = {

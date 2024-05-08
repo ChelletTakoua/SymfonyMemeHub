@@ -17,7 +17,6 @@ const Home = () => {
         setIsLoading(true);
         window.scrollTo({ top: 0, behavior: "smooth" });
         const res = await memeApi.getAllMemes(page, memesPerPage, sortOrder);
-        console.log(res.data);
         setNumberOfPages(res?.data.totalPages);
         setMemes(res?.data.memes);
       } catch (error) {
