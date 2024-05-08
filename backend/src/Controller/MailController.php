@@ -18,8 +18,8 @@ class MailController extends AbstractController
     public function index(MailerService $mailer,ManagerRegistry $doctrine): Response
     {
         $repo=$doctrine->getRepository(Meme::class);
-        $blockedMemes=$repo->findByBlocked(false);
-        dd($blockedMemes);
+        $userMemes=$repo->findByUser(1);
+        dd($userMemes);
         $user=new User();
         $user->setEmail('taki74ayadi@gmail.com');
         $user->setUsername('taki');

@@ -188,10 +188,16 @@ class MemeRepository extends ServiceEntityRepository
         return $this->getbaseQueryBuilder('m')
             ->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
             ->where('bm.meme IS '.$val)
-            ->getQuery()
-            ->getResult();
+        ;
     }
-
+    //finds the unblocked memes of a user 
+    public function findByUser($idUser){
+        return $this->findByBlocked(false)
+                    ->where('m.user = '.$idUser)
+                    ->getQuery()
+                    ->getResult()
+        ;
+    }
 //    /**
 //     * @return Meme[] Returns an array of Meme objects
 //     */
