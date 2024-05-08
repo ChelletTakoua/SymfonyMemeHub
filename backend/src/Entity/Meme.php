@@ -283,4 +283,9 @@ class Meme implements JsonSerializable
         return count($this->getLikes());
 
     }
+
+    public function isDeleted()
+    {
+        return $this->deletedAt!=null;
+    }
 }

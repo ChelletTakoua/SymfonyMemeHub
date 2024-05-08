@@ -274,6 +274,9 @@ class MemeController extends AbstractController
         if ($meme->getUser() !== $user) {
             throw new AccessDeniedHttpException("No permission to delete this meme");
         }
+        if($meme->isDeleted()){
+            throw new BadRequestHttpException("Meme already deleted");
+        }
 
         $meme->softDelete($this->doctrine->getManager());
 
