@@ -37,7 +37,8 @@ class MemeController extends AbstractController
         $user = $this->getUser();
         $page = (int)($request->query->get('page') ?? 1);
         $pageSize = (int)($request->query->get('pageSize') ?? -1);
-        $memes = $this->repo->findPaginated($page, $pageSize);
+        $order = $request->query->get('order') ?? 'desc';
+        $memes = $this->repo->findPaginated($page, $pageSize, $order, false);
         foreach ($memes as $meme) {
             $meme->setCurrentUser($user);
         }
