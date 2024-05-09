@@ -13,8 +13,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterfaceCallbacks;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[
     ORM\Entity(repositoryClass: UserRepository::class),
