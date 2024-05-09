@@ -9,11 +9,25 @@ use Symfony\Component\Mailer\TransportExceptionInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Dotenv\Dotenv;
 use App\Entity\User;
-
+use Doctrine\ORM\Query\Parameter;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class MailerService{
+    private RouterInterface $router;
+    private $jwtManager;
+    private $params;
+ 
 
-    public function __construct(private MailerInterface $mailer){}
+
+    public function __construct(private MailerInterface $mailer , RouterInterface $router,JWTTokenManagerInterface $jwtManager, ParameterBagInterface $params){
+        $this->router = $router;
+        $this->jwtManager = $jwtManager;
+        $this->params = $params;
+
+    }
 
      /**
      * Sends an email.
@@ -62,15 +76,24 @@ class MailerService{
      * @param User $user The user to send the email to.
      *
      */
-    public function sendAccountCreatedMail(User $user): void{
+    public function sendAccountCreatedMail(User $user): string{
 
-        $link = "";
+
+        $host = $this->params->get('frontend_host');
+        $port = $this->params->get('frontend_port');
+
+        $link = "http://$host:$port/verifyEmail?token=" .$this->jwtManager->create($user);
 
         Self::sendMailFile($user->getEmail(), "Welcome to Memehub !", 'account-created.html', [
             "username" => $user->getUsername(),
             "link" => $link
         ]);
-    }
+        return$this->jwtManager->create($user);
+      
+
+        }
+        
+    
     /**
      * Sends an email for password reset.
      *
@@ -79,13 +102,23 @@ class MailerService{
      */
     public function sendPasswordResetMail(User $user): void {
 
-        $link = "";
+        $host = $this->params->get('frontend_host');
+        $port = $this->params->get('frontend_port');
+
+        $link = "http://$host:$port/verifyEmail?token=" .$this->jwtManager->create($user);
 
         Self::sendMailFile($user->getEmail(), "password reset", 'password-reset.html', [
             "username" => $user->getUsername(),
             "link" => $link
         ]);
     }
+
+
+
+
+
+
+    
 
 }
 
