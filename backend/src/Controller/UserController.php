@@ -47,6 +47,17 @@ class UserController extends AbstractController
                                     Response::HTTP_OK);
     }
 
+    #[Route('/user/{id}', name: 'get_user_profile')]
+    public function getUserProfile(?User $user=null): JsonResponse
+    {
+        if (!$user) {
+            throw new NotFoundHttpException("User not found");
+        }
+
+        return $this->json(['user' => $user]);
+    }
+
+
 
    #[Route('/forgotPassword/{username}', name: 'forgot_password')]
    public function forgotPassword($username)
