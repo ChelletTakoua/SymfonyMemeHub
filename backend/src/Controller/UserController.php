@@ -89,11 +89,6 @@ class UserController extends AbstractController
     }
 
 
-
-
-   
-
-    // }
 //    #[Route('/sendVerificationEmail/{username}', name: 'send_verification_email')]
 //    public function sendVerificationEmail($username): Response
 // {
@@ -111,20 +106,35 @@ class UserController extends AbstractController
     // #[Route('/verifyEmail', name: 'verify_email')]
     // public function verifyEmail(): Response
     // {
+    //     $data = $request->toArray();
+    //     if (!isset($data['token'])) {
+    //         throw new BadRequestHttpException("Token must be provided");
+    //     }
+    //     $token = $data['token'];
+    //     try{
+    //         $user = $this->jwtService->decodeJWT($token);
+    //     }
+        
     //     // Your code here
     //     return new Response('');
     // }
 
 
-    #[Route('/user/{id}', name: 'get_user_profile')]
-    public function getUserProfile(?User $user=null): JsonResponse
-    {
-        if (!$user) {
-            throw new NotFoundHttpException("User not found");
-        }
 
-        return $this->json(['user' => $user]);
-    }
+
+
+
+
+
+    // #[Route('/user/{id}', name: 'get_user_profile')]
+    // public function getUserProfile(?User $user=null): JsonResponse
+    // {
+    //     if (!$user) {
+    //         throw new NotFoundHttpException("User not found");
+    //     }
+
+    //     return $this->json(['user' => $user]);
+    // }
 
 
     #[Route('/user/profile/edit', name: 'edit_profile',  methods: ['POST'])]
