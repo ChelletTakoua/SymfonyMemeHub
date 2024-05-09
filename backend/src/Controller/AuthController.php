@@ -48,12 +48,12 @@ class AuthController extends AbstractController
         $user= $this->getUser();
         if($user->isBanned()) {
             $session->invalidate();
-            return new JsonResponse(['message' => 'User is banned'], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse(['error' => 'User is banned'], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!$user->isVerified()) {
             $session->invalidate();
-            return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);
+            return new JsonResponse(['error' => 'User is not verified'], Response::HTTP_FORBIDDEN);
         }
         return new JsonResponse(['user' => $user ]);
     }
