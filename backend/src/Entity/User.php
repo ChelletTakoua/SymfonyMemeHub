@@ -368,7 +368,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, \JsonSe
             'verified' => $this->verified,
             'profilePic' => stream_get_contents($this->profilePic),
             'roles' => $this->roles,
-            'isBanned' => $this->banned
+            'banned' => $this->banned
         ];
     }
 

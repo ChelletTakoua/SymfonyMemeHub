@@ -68,8 +68,9 @@ class BannedUserController extends AbstractController
         $bannedUser->setReason($reason);
 
         $entityManager = $this->doctrine->getManager();
-        $entityManager->persist($bannedUser);
         $user->setBanned(true);
+        $entityManager->persist($bannedUser);
+        $entityManager->persist($user);
         $entityManager->flush();
 
         return $this->json([
