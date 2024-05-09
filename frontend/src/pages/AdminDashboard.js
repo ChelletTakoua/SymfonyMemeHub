@@ -133,9 +133,9 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleChangeRole = async (userId, newRole) => {
+  const handleChangeRole = async (userId, newRoles) => {
     try {
-      await adminApi.changeUserRole(userId, newRole);
+      await adminApi.changeUserRole(userId, newRoles);
       toast.success("User role changed successfully");
       await fetchUsersAndStats();
     } catch (error) {
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
         toast.error("Please provide a reason for banning the user");
         return;
       }
-      //await adminApi.banUser(userId, reasons[userId], dates[userId]);
+      await adminApi.banUser(userId, reasons[userId], dates[userId]);
       toast.success("User banned successfully");
       await fetchUsersAndStats();
     } catch (error) {
@@ -221,10 +221,10 @@ const AdminDashboard = () => {
                         <button
                           className="text-blue-600 hover:text-blue-900 mr-2"
                           onClick={() => {
-                            const newRole = user.roles.includes("ROLE_ADMIN")
-                              ? "ROLE_USER"
-                              : "ROLE_ADMIN";
-                            handleChangeRole(user.id, newRole);
+                            const newRoles = user.roles.includes("ROLE_ADMIN")
+                              ? ["ROLE_USER"]
+                              : ["ROLE_ADMIN", "ROLE_USER"];
+                            handleChangeRole(user.id, newRoles);
                           }}
                         >
                           Change Role
@@ -262,9 +262,10 @@ const AdminDashboard = () => {
                         />
                         <button
                           className="text-red-600 hover:text-red-900"
+                          disabled={reasons[user.id] === "" || user?.banned}
                           onClick={() => handleBan(user.id)}
                         >
-                          Ban
+                          {user?.banned ? "Already banned" : "Ban"}
                         </button>
                       </td>
                     </tr>

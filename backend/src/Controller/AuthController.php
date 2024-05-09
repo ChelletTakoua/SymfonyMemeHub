@@ -45,7 +45,9 @@ class AuthController extends AbstractController
     public function login(): JsonResponse
     {
         $user= $this->getUser();
-        //TODO: Check if user is banned
+        if(!$user->isBanned()) {
+            return new JsonResponse(['message' => 'User is banned'], Response::HTTP_UNAUTHORIZED);
+        }
 
         if (!$user->isVerified()) {
             return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);

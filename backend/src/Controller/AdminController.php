@@ -78,16 +78,15 @@ class AdminController extends AbstractController
         if (empty($data['roles'])) {
             return new JsonResponse(['message' => 'Role required'], Response::HTTP_BAD_REQUEST);
         }
-
-        if ($data["roles"] != "ROLE_USER" && $data["roles"] != "ROLE_ADMIN") {
-            return new JsonResponse(['message' => 'Invalid role '], Response::HTTP_BAD_REQUEST);
+        if ($data['roles'] != ["ROLE_ADMIN", "ROLE_USER"] && $data['roles'] != ["ROLE_USER"]) {
+            throw new BadRequestException("Invalid role");
         }
-        $role = $data['roles'];
+        $roles = $data['roles'];
         $user = $this->repo->find($id);
         if (!$user) {
             throw new NotFoundHttpException("User not found");
         }
-        $user->setRoles([$role]);
+        $user->setRoles($roles);
         $entityManager = $this->doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
