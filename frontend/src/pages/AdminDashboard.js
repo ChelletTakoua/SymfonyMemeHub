@@ -48,6 +48,7 @@ const AdminDashboard = () => {
   const fetchUsersAndStats = useCallback(async () => {
     try {
       const res = await adminApi.getAllUsers();
+      console.log(res);
       // Update the totalUsers stat
       setStats((prev) => {
         return {
