@@ -6,6 +6,7 @@ use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\Exception;
 use Symfony\Component\HttpKernel\Exception\InvalidTokenException;
 use Exception as GlobalException;
@@ -49,13 +50,14 @@ class AuthKeyService
             $decoded = $this->jwtManager->decode($token);
             // check if the token is expired
             if ($decoded['exp'] < time()) {
-                throw new InvalidTokenException('Token expired');
+                throw new BadRequestHttpException("Token expired");
             }
             // fetch user from database
             $user = $this->doctrine->getRepository(User::class)->findByUsernameASC($decoded['username'])[0];
             return $user;
         } catch (GlobalException $e) {
-            throw new InvalidTokenException('Invalid token' );
+            throw new BadRequestHttpException("Invalid token");
+
 
         }
 

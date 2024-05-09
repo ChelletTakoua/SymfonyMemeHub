@@ -11,4 +11,5 @@ trait SoftDeleteRepositoryTrait
         return $this->createQueryBuilder($alias)
             ->andWhere($alias . '.deletedAt IS NULL');
     }
+
 }

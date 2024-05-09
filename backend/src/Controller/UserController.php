@@ -60,14 +60,50 @@ class UserController extends AbstractController
        $emailParts = explode('@', $user->getEmail());
         $hiddenEmailPart = substr($emailParts[0], 0, 2) . str_repeat('*', strlen($emailParts[0]) - 2);
         $hiddenEmail = $hiddenEmailPart . '@' . $emailParts[1];
-        $response = $this->json(["email" => $hiddenEmail]);
-        dd($response);
+        return new JsonResponse(["email" => $hiddenEmail]);
+    }
+
+   #[Route('/sendVerificationEmail/{username}', name: 'send_verification_email')]
+    public function sendVerificationEmail($username) : JsonResponse
+   {
+        $user = $this->repo->findOneBy(['username' => $username]);
+        if (!$user) {
+            throw new NotFoundHttpException("User not found");
+        }
+        if($user->isVerified()){
+            return new JsonResponse(['message' => 'User is already verified'], Response::HTTP_OK);
+        }
+        $this->mailer->sendAccountCreatedMail($user);
+       $emailParts = explode('@', $user->getEmail());
+       $hiddenEmailPart = substr($emailParts[0], 0, 2) . str_repeat('*', strlen($emailParts[0]) - 2);
+       $hiddenEmail = $hiddenEmailPart . '@' . $emailParts[1];
+       return new JsonResponse(["email" => $hiddenEmail,'status' => 'Email sent']);
+    }
+
+    #[Route('/verifyEmail', name: 'verify_email')]
+    public function verifyEmail(EntityManagerInterface $entityManager, Request $request)
+    {
+        $data = $request->toArray();
+
+        if (!isset($data['token'])) {
+            throw new BadRequestHttpException("Token must be provided");
+        }
+
+        $token = $data['token'];
+        try {
+            $user = $this->jwtService->decodeJWT($token);
+            $user->setVerified(true);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            throw new BadRequestHttpException("Invalid token");
+        }
+        return new JsonResponse(['status' => 'Email verified'], Response::HTTP_CREATED);
     }
 
     #[Route('/resetPassword', name: 'reset_password')]
     public function resetPassword(EntityManagerInterface $entityManager, Request $request, UserPasswordHasherInterface $passwordHasher)
-    {   
-        $this->mailer->sendAccountCreatedMail($this->getUser());
+    {
         $data = $request->toArray();
        
         if (!isset($data['token'])) {
@@ -77,64 +113,13 @@ class UserController extends AbstractController
             throw new BadRequestHttpException("Password must be provided");
         }
 
-        $token = $data['token'];
-        $password = $data['password'];
-        $user = $this->jwtService->decodeJWT($token);
+        $user = $this->jwtService->decodeJWT($data['token']);
         $user->setPassword($passwordHasher->hashPassword($user, $data['password']));
         $entityManager->persist($user);
         $entityManager->flush();
         return new JsonResponse(['status' => 'Password changed'], Response::HTTP_CREATED);
         //$this->auth->login($user->getUsername(), $password, false);
     }
-
-
-//    #[Route('/sendVerificationEmail/{username}', name: 'send_verification_email')]
-//    public function sendVerificationEmail($username): Response
-// {
-//        $user = $this->repo->findOneBy(['username' => $username]);
-//        if (!$user) {
-//            throw new NotFoundHttpException("User not found");
-//        }
-//        //Mail Service
-//        return $this->json([
-//            'status' => 'success',
-//            'code' => 200
-//        ]);
-//    }
-
-    // #[Route('/verifyEmail', name: 'verify_email')]
-    // public function verifyEmail(): Response
-    // {
-    //     $data = $request->toArray();
-    //     if (!isset($data['token'])) {
-    //         throw new BadRequestHttpException("Token must be provided");
-    //     }
-    //     $token = $data['token'];
-    //     try{
-    //         $user = $this->jwtService->decodeJWT($token);
-    //     }
-        
-    //     // Your code here
-    //     return new Response('');
-    // }
-
-
-
-
-
-
-
-
-    // #[Route('/user/{id}', name: 'get_user_profile')]
-    // public function getUserProfile(?User $user=null): JsonResponse
-    // {
-    //     if (!$user) {
-    //         throw new NotFoundHttpException("User not found");
-    //     }
-
-    //     return $this->json(['user' => $user]);
-    // }
-
 
     #[Route('/user/profile/edit', name: 'edit_profile',  methods: ['POST'])]
     public function editProfile(Request $request): Response
@@ -169,9 +154,6 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
         $user->softDelete($this->doctrine->getManager());
-        // Your code here
-        // the user will be banned not removed from the db
         return new Response('');
     }
-    //TODO: check if user is deleted/banned when login
 }

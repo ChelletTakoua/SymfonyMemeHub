@@ -105,7 +105,7 @@ class MailerService{
         $host = $this->params->get('frontend_host');
         $port = $this->params->get('frontend_port');
 
-        $link = "http://$host:$port/verifyEmail?token=" .$this->jwtManager->create($user);
+        $link = "http://$host:$port/resetPassword?token=" .$this->jwtManager->create($user);
 
         Self::sendMailFile($user->getEmail(), "password reset", 'password-reset.html', [
             "username" => $user->getUsername(),
