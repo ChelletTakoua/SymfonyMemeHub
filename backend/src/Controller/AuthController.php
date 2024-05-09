@@ -9,6 +9,7 @@ use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AuthController extends AbstractController
@@ -42,14 +43,16 @@ class AuthController extends AbstractController
     }
 
     #[Route('/login', name: 'login', methods: ['POST'])]
-    public function login(): JsonResponse
+    public function login(SessionInterface $session): JsonResponse
     {
         $user= $this->getUser();
-        if(!$user->isBanned()) {
+        if($user->isBanned()) {
+            $session->invalidate();
             return new JsonResponse(['message' => 'User is banned'], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!$user->isVerified()) {
+            $session->invalidate();
             return new JsonResponse(['message' => 'User is not verified'], Response::HTTP_FORBIDDEN);
         }
         return new JsonResponse(['user' => $user ]);

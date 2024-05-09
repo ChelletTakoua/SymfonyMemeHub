@@ -48,7 +48,6 @@ const AdminDashboard = () => {
   const fetchUsersAndStats = useCallback(async () => {
     try {
       const res = await adminApi.getAllUsers();
-      console.log(res);
       // Update the totalUsers stat
       setStats((prev) => {
         return {
@@ -61,7 +60,7 @@ const AdminDashboard = () => {
       // Update the users list
       setUsers(res?.data.users.filter((el) => el.id !== user.id));
       // set date for each user to today
-      const today = addDays(new Date(), 1);
+      const today = addDays(new Date(), 1).toISOString();
       setDates(
         res?.data.users.reduce((acc, user) => {
           acc[user.id] = today;
@@ -125,15 +124,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleViewMeme = async (memeId) => {
-    try {
-      const res = await memeApi.getMemeById(memeId);
-      setViewedImg(`data:image/png;base64,${res.data.meme.result_img}`);
-    } catch (error) {
-      toast.error("Failed to view meme");
-    }
-  };
-
   const handleChangeRole = async (userId, newRoles) => {
     try {
       await adminApi.changeUserRole(userId, newRoles);
@@ -156,7 +146,6 @@ const AdminDashboard = () => {
 
   const handleBan = async (userId) => {
     try {
-      console.log(userId, dates[userId], reasons[userId]);
       if (reasons[userId] === "") {
         toast.error("Please provide a reason for banning the user");
         return;
@@ -241,7 +230,7 @@ const AdminDashboard = () => {
                             setDates((prev) => {
                               return {
                                 ...prev,
-                                [user.id]: date,
+                                [user.id]: date.toISOString(),
                               };
                             });
                           }}
@@ -250,6 +239,7 @@ const AdminDashboard = () => {
                         <input
                           type="text"
                           placeholder="Reason"
+                          disabled={user?.banned}
                           className="border border-gray-300 rounded px-2 py-1"
                           value={reasons[user.id] ? reasons[user.id] : ""}
                           onChange={(e) => {
@@ -337,7 +327,9 @@ const AdminDashboard = () => {
                             className="text-blue-600 hover:text-blue-900 mr-2"
                             onClick={() => {
                               setOpenView(true);
-                              handleViewMeme(report.meme_id);
+                              setViewedImg(
+                                `data:image/png;base64,${report.meme.result_img}`
+                              );
                             }}
                           >
                             View

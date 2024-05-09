@@ -5,7 +5,7 @@ const USER_API_ROUTES = {
   GET_USER_PROFILE: "/user/:id",
   MODIFY_PASSWORD: "/user/profile/modifyPassword",
   EDIT_PROFILE: "/user/profile/edit",
-  DELETE_PROFILE: "/user/profile",
+  DELETE_PROFILE: "/deleteAccount",
   SEND_VERIF_EMAIL: "/sendVerificationEmail/:username",
   VERIFY_EMAIL: "/verifyEmail",
   FORGOT_PASSWORD: "/forgotPassword/:username",

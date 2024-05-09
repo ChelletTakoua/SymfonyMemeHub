@@ -54,7 +54,7 @@ const AppProvider = ({ children }) => {
           toast.error(error?.response?.data.message);
         }
       } else {
-        toast.error(error?.response?.data.error);
+        toast.error(error?.response?.data.message);
       }
     }
   };
