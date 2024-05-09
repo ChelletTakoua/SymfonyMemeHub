@@ -17,10 +17,6 @@ class MailController extends AbstractController
     #[Route('/mail', name: 'app_mail')]
     public function index(MailerService $mailer,ManagerRegistry $doctrine): Response
     {
-        $repo=$doctrine->getRepository(Meme::class);
-        $userMemes=$repo->findByUser(1);
-        dd($userMemes);
-        $user=new User();
         $user->setEmail('taki74ayadi@gmail.com');
         $user->setUsername('taki');
         $mailer->sendAccountCreatedMail($user);
