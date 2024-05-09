@@ -36,6 +36,7 @@ const ADMIN_API_ROUTES = {
   GET_USER_PROFILE: "/admin/users/:id",
   CHANGE_USER_ROLE: "/admin/users/:id/role",
   DELETE_USER: "/admin/users/:id/delete",
+  BAN_USER: "/admin/users/:id/ban",
   GET_ALL_REPORTS: "/admin/reports",
   RESOLVE_REPORT: "/admin/reports/:id/resolve",
   IGNORE_REPORT: "/admin/reports/:id/ignore",

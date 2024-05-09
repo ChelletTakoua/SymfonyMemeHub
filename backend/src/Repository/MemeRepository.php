@@ -154,14 +154,50 @@ class MemeRepository extends ServiceEntityRepository
         return ceil($totalMemes / $pageSize);
     }
 
-    public function findMemesByUser(int $userId, bool $includeBlocked = true): array
+    public function findMemesByUser(int $userId): array
     {
-        return $this->findBy(['user' => $userId], ['creationDate' => 'DESC'], null, null, $includeBlocked);
+        return $this->findBy(['user' => $userId], ['creationDate' => 'DESC']);
     }
 
+    public function findByASC(){
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.creationDate', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findbyDESC(){
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.creationDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
+    public function findBydate($date){
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.creationDate = :val')
+            ->setParameter('val', $date)
+            ->getQuery()
+            ->getResult()
+        ; 
+    }
 
-
+    public function findByBlocked($blocked){
+        $val=$blocked?"not null":"null";
+        return $this->getbaseQueryBuilder('m')
+            ->leftJoin(BlockedMeme::class, 'bm', 'WITH', 'm.id = bm.meme')
+            ->where('bm.meme IS '.$val)
+        ;
+    }
+    //finds the unblocked memes of a user 
+    public function findByUser($idUser){
+        return $this->findByBlocked(false)
+                    ->where('m.user = '.$idUser)
+                    ->getQuery()
+                    ->getResult()
+        ;
+    }
 //    /**
 //     * @return Meme[] Returns an array of Meme objects
 //     */

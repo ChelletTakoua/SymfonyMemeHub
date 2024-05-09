@@ -34,3 +34,19 @@ TODO :
 - repositories
 - authentication 
 - 
+
+
+
+
+rq: in front
+    ban user for :
+        - 2 weeks
+        - 1 month
+        - 3months
+        - permanently
+
+
+TO_DOs:
+    - add deleteProfile button to front(in profile page)
+    - add ban button to dashboard admin
+    - unique and asserts 

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\BannedUserRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+use App\Repository\BannedUserRepository;
 
 #[
     ORM\Entity(repositoryClass: BannedUserRepository::class),
@@ -20,9 +20,8 @@ class BannedUser
     #[ORM\OneToOne(inversedBy: 'bannedUser', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $banDate = null;
+    private ?\DateTimeInterface $banStartDate = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $banDuration = null;
@@ -33,6 +32,9 @@ class BannedUser
     #[ORM\ManyToOne(inversedBy: 'bannedUsers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $admin = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $banEndDate = null;
 
     public function getId(): ?int
     {
@@ -51,14 +53,14 @@ class BannedUser
         return $this;
     }
 
-    public function getBanDate(): ?\DateTimeInterface
+    public function getbanStartDate(): ?\DateTimeInterface
     {
-        return $this->banDate;
+        return $this->banStartDate;
     }
 
-    public function setBanDate(\DateTimeInterface $banDate): static
+    public function setbanStartDate(\DateTimeInterface $banStartDate): static
     {
-        $this->banDate = $banDate;
+        $this->banStartDate = $banStartDate;
 
         return $this;
     }
@@ -90,7 +92,7 @@ class BannedUser
     #[ORM\PrePersist]
     public function onPersist(): void
     {
-        $this->banDate = new \DateTime();
+        $this->banStartDate = new \DateTime();
     }
 
     public function getAdmin(): ?User
@@ -101,6 +103,18 @@ class BannedUser
     public function setAdmin(?User $admin): static
     {
         $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function getBanEndDate(): ?\DateTimeInterface
+    {
+        return $this->banEndDate;
+    }
+
+    public function setBanEndDate(?\DateTimeInterface $banEndDate): static
+    {
+        $this->banEndDate = $banEndDate;
 
         return $this;
     }

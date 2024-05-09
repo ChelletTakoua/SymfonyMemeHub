@@ -2,9 +2,9 @@
 
 namespace App\DataFixtures;
 
+use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
-use Doctrine\Persistence\ObjectManager;
 
 class MasterFixture extends Fixture implements FixtureGroupInterface
 {
@@ -50,7 +50,7 @@ class MasterFixture extends Fixture implements FixtureGroupInterface
         $fixture->load($manager);
     }
 
-private function loadReports(ObjectManager $manager)
+    private function loadReports(ObjectManager $manager)
     {
         $fixture = new ReportFixtures();
         $fixture->load($manager);
@@ -72,5 +72,4 @@ private function loadReports(ObjectManager $manager)
     {
         return ['master'];
     }
-
 }

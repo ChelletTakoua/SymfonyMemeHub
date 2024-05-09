@@ -4,9 +4,9 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\BannedUser;
-use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 
 class BannedUserFixtures extends Fixture implements FixtureGroupInterface
 {
@@ -18,26 +18,15 @@ class BannedUserFixtures extends Fixture implements FixtureGroupInterface
     public function load(ObjectManager $manager)
     {
         $userRepo = $manager->getRepository(User::class);
-        $bannedUserRepo = $manager->getRepository(BannedUser::class);
-
-        $bannedUsers = $bannedUserRepo->findAll();
-        $bannedUserIds = array_map(function ($bannedUser) {
-            return $bannedUser->getUser()->getId();
-        }, $bannedUsers);
-
-        $queryBuilder = $userRepo->createQueryBuilder('u');
-        if (!empty($bannedUserIds)) {
-            $queryBuilder->where($queryBuilder->expr()->notIn('u.id', $bannedUserIds));
-        }
-        $queryBuilder->setMaxResults(4);
-        $users = $queryBuilder->getQuery()->getResult();
-
+        $users = $userRepo->findBy([], [], 5);
         foreach ($users as $user) {
+
+            if ($user->getUsername() === 'admin') continue;
             $bannedUser = new BannedUser();
             $bannedUser->setUser($user);
             $bannedUser->setBanDuration(rand(1, 30));
             $bannedUser->setReason('Test reason');
-
+            $bannedUser->setAdmin($userRepo->findOneBy(['username' => 'admin']));
             $manager->persist($bannedUser);
         }
 

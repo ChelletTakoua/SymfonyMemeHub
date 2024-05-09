@@ -41,7 +41,7 @@ class ReportController extends AbstractController
      */
 
     #[Route('/admin/reports/{id}/resolve', name: 'resolve_report')]
-    public function resolveReport(Report $report): Response
+    public function resolveReport(?Report $report): Response
     {
         $admin = $this->getUser();
         if (!$report) {
@@ -87,7 +87,6 @@ class ReportController extends AbstractController
         ]);
     }
 
-   
 }
 
 
