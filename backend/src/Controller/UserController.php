@@ -85,7 +85,6 @@ class UserController extends AbstractController
         $entityManager->flush();
         return new JsonResponse(['status' => 'Password changed'], Response::HTTP_CREATED);
         //$this->auth->login($user->getUsername(), $password, false);
-        dd($user);
     }
 
 
